@@ -1,0 +1,329 @@
+.hero {
+  position: relative;
+  padding-block: clamp(96px, 12vh, 138px) clamp(28px, 4vh, 48px);
+  overflow: hidden;
+}
+
+/* Grade técnica estática no lugar do canvas: presença sem custo de runtime. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 96px 96px;
+  opacity: 0.4;
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 70% at 30% 40%,
+    #000 20%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 70% at 30% 40%,
+    #000 20%,
+    transparent 78%
+  );
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.94fr);
+  gap: clamp(30px, 4.5vw, 72px);
+  align-items: center;
+}
+
+/* ── coluna de texto ───────────────────────────────────────────────── */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 18px;
+  font-family: var(--f-label);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 clamp(20px, 3vh, 30px);
+  padding: 0;
+  list-style: none;
+}
+
+.meta li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta li::before {
+  content: "";
+  width: 3px;
+  height: 3px;
+  background: var(--red);
+  border-radius: 50%;
+  flex: none;
+}
+
+.meta li:first-child {
+  color: var(--paper);
+}
+
+.headline {
+  margin: 0 0 22px;
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 112, "wght" 820;
+  font-size: clamp(31px, 3.7vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.032em;
+  color: var(--paper);
+  text-wrap: balance;
+}
+
+.headline strong {
+  font-weight: inherit;
+  font-variation-settings: inherit;
+  color: var(--red);
+}
+
+.sub {
+  margin: 0;
+  color: var(--dim-hi);
+  font-size: clamp(15px, 1.2vw, 17.5px);
+  line-height: 1.68;
+  max-width: 52ch;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.btn {
+  font-family: var(--f-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 24px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition:
+    transform 0.16s,
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.primary {
+  background: var(--red);
+  color: var(--paper);
+  border: 1px solid var(--red);
+}
+
+.primary:hover {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--bone);
+  border: 1px solid var(--line-2);
+}
+
+.secondary:hover {
+  border-color: var(--paper);
+  color: var(--paper);
+}
+
+/* ── screenshot do produto ─────────────────────────────────────────── */
+.shot {
+  position: relative;
+  margin: 0;
+}
+
+.shot::before {
+  content: "";
+  position: absolute;
+  inset: -14% -8% -20%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    rgba(226, 71, 44, 0.16),
+    transparent 68%
+  );
+}
+
+.frame {
+  border: 1px solid var(--line-2);
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--ink-2);
+  box-shadow: 0 44px 84px -34px rgba(0, 0, 0, 0.92);
+}
+
+.bar {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--ink-3);
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+  flex: none;
+}
+
+.dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-2);
+}
+
+.barLabel {
+  font-family: var(--f-label);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shotCaption {
+  margin: 12px 0 0;
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  line-height: 1.6;
+}
+
+/* ── faixa de produtos ─────────────────────────────────────────────── */
+.rail {
+  margin-top: clamp(40px, 6vh, 72px);
+  padding-top: clamp(20px, 3vh, 28px);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 44px);
+  align-items: center;
+}
+
+.railLabel {
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.railItems {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(20px, 3.4vw, 52px);
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+
+.product:hover {
+  color: var(--paper);
+}
+
+.wordmark {
+  display: block;
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 108, "wght" 780;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* O acento laranja é a marca do Tableflow; fica cinza em repouso e só
+   acende no hover, para a faixa não brigar com o vermelho da página. */
+.tf {
+  color: inherit;
+  transition: color 0.25s;
+}
+
+.product:hover .tf {
+  color: #ff6b2b;
+}
+
+.desc {
+  display: block;
+  font-family: var(--f-label);
+  font-size: 8.5px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1000px) {
+  .top {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+  .shot {
+    order: 2;
+  }
+  .rail {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+@media (max-width: 620px) {
+  .railItems {
+    gap: 18px 26px;
+  }
+  .wordmark {
+    font-size: 15px;
+  }
+}

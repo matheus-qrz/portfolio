@@ -1,102 +1,42 @@
-const experience = [
-  {
-    period: "2021 — now",
-    role: "Frontend Developer",
-    company: "Wisecare",
-    desc: "Building and maintaining the core product frontend with Next.js, React 19 and a custom internal design system. Close collaboration with design and backend teams across multiple product lines.",
-  },
-  {
-    period: "2021 — 2024",
-    role: "Frontend Developer",
-    company: "Netfans",
-    desc: "Building and maintaining the core product frontend with React 18 and 8D audio virtual rooms development for multiple entertainment purposes.",
-  },
-  {
-    period: "2023 — now",
-    role: "Founder & Developer",
-    company: "Independent",
-    desc: "Building SaaS products and taking on freelance projects. Full ownership from architecture to deployment — handling frontend, backend, infra and billing infrastructure.",
-  },
-];
+"use client";
+
+import { useRef } from "react";
+import { useI18n } from "@/lib/i18n";
+import { useReveal } from "@/hooks/useReveal";
+import styles from "./Experience.module.css";
 
 export default function Experience() {
+  const root = useRef<HTMLElement>(null);
+  const { t } = useI18n();
+
+  useReveal(root, [
+    { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
+    { selector: `.${styles.row}`, start: "top 92%", y: 18, duration: 0.6 },
+  ]);
+
   return (
-    <section
-      id="experience"
-      style={{
-        position: "relative",
-        zIndex: 1,
-        maxWidth: 960,
-        margin: "0 auto",
-        padding: "80px 48px",
-        borderTop: "1px solid var(--border)",
-      }}
-    >
-      <p
-        style={{
-          fontSize: 14,
-          fontWeight: 500,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase" as const,
-          color: "var(--accent)",
-          marginBottom: 40,
-        }}
-      >
-        Experience
-      </p>
-      <div>
-        {experience.map((e, i) => (
-          <div
-            key={e.company}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "140px 1fr",
-              gap: 32,
-              padding: "32px 0",
-              borderBottom:
-                i < experience.length - 1 ? "1px solid var(--border)" : "none",
-            }}
-          >
-            <span
-              style={{ fontSize: 12, color: "var(--muted)", paddingTop: 4 }}
-            >
-              {e.period}
-            </span>
-            <div>
-              <p
-                style={{
-                  fontFamily: "'Syne',sans-serif",
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "var(--text)",
-                  marginBottom: 4,
-                }}
-              >
-                {e.role}
-              </p>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--accent)",
-                  letterSpacing: "0.06em",
-                  marginBottom: 12,
-                }}
-              >
-                {e.company}
-              </p>
-              <p
-                style={{
-                  fontSize: 14,
-                  fontWeight: 300,
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                }}
-              >
-                {e.desc}
-              </p>
-            </div>
+    <section id="path" className="sec" ref={root}>
+      <div className="shell">
+        <div className="secHead">
+          <div className="top">
+            <p className="eyebrow">{t.path.eyebrow}</p>
+            <span className="idx">05 / 06</span>
           </div>
-        ))}
+          <h2 className="h2">{t.path.h}</h2>
+        </div>
+
+        <div className={styles.list}>
+          {t.path.roles.map((role) => (
+            <div className={styles.row} key={`${role.org}-${role.when}`}>
+              <span className={styles.when}>{role.when}</span>
+              <div>
+                <h3 className={styles.role}>{role.role}</h3>
+                <span className={styles.org}>{role.org}</span>
+                <p className={styles.desc}>{role.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

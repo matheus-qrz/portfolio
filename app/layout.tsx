@@ -1,10 +1,39 @@
 import type { Metadata } from "next";
+import { Archivo, IBM_Plex_Mono, Martian_Mono } from "next/font/google";
 import "./globals.css";
 
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const martian = Martian_Mono({
+  subsets: ["latin"],
+  variable: "--font-martian",
+  display: "swap",
+});
+
+const plex = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Matheus Queiroz — Software Engineer",
+  metadataBase: new URL("https://matheusoliveira.dev"),
+  title: "Matheus Oliveira — Engenheiro de software",
   description:
-    "Frontend engineer building polished interfaces and scalable SaaS products.",
+    "Construo os sistemas que os negócios usam para funcionar: pedido por QR code, impressão térmica ESC/POS, cobrança recorrente e os painéis que sustentam a operação.",
+  openGraph: {
+    title: "Matheus Oliveira — Engenheiro de software",
+    description:
+      "SaaS de gestão para restaurantes e hotelaria, checkout sob medida e ferramentas web. React 19, Next.js 15, Node e AWS.",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -13,20 +42,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body>{children}</body>
+    <html
+      lang="pt-BR"
+      className={`${archivo.variable} ${martian.variable} ${plex.variable}`}
+    >
+      <body>
+        <div className="grain" aria-hidden="true" />
+        {children}
+      </body>
     </html>
   );
 }

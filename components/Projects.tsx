@@ -1,153 +1,78 @@
-const projects = [
-  {
-    num: "01",
-    name: "Servin",
-    desc: "Hospitality management SaaS. QR code ordering, all registered hotel services management, thermal printer integration (ESC/POS).",
-    tags: ["Next.js", "Node.js", "AWS", "MongoDB"],
-    url: null,
-  },
-  {
-    num: "02",
-    name: "Tableflow",
-    desc: "Food service management SaaS with real-time qr code table ordering, thermal printer integration (ESC/POS), takeaway, delivery, statistics and subscription billing infrastructure.",
-    tags: ["Next.js", "TypeScript", "Stripe", "AWS Amplify"],
-    url: "https://tableflow.software",
-  },
-  {
-    num: "03",
-    name: "Freelas",
-    desc: "A Next.js monorepo of productivity tools for Brazilian freelancers — pricing calculator, contract generator, and more.",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS"],
-    url: null,
-  },
-];
+"use client";
+
+import { useRef } from "react";
+import { PROJECTS } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
+import { useReveal } from "@/hooks/useReveal";
+import styles from "./Projects.module.css";
 
 export default function Projects() {
+  const root = useRef<HTMLElement>(null);
+  const { t } = useI18n();
+
+  useReveal(root, [
+    { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
+    { selector: `.${styles.item}`, start: "top 92%", y: 18, duration: 0.6 },
+  ]);
+
   return (
-    <section
-      id="projects"
-      style={{
-        position: "relative",
-        zIndex: 1,
-        maxWidth: 960,
-        margin: "0 auto",
-        padding: "80px 48px",
-        borderTop: "1px solid var(--border)",
-      }}
-    >
-      <style>{`
-        .proj-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px 24px; display:flex; flex-direction:column; gap:14px; transition:border-color 0.25s, transform 0.2s; position:relative; text-decoration:none; }
-        .proj-card:hover { border-color:var(--border2); transform:translateY(-3px); }
-        .proj-card.linked:hover { border-color:#ff6b2b; }
-        .proj-arrow { position:absolute; top:20px; right:20px; width:32px; height:32px; border-radius:50%; background:#ff6b2b; display:flex; align-items:center; justify-content:center; opacity:0; transform:scale(0.7); transition:opacity 0.2s, transform 0.2s; }
-        .proj-card.linked:hover .proj-arrow { opacity:1; transform:scale(1); }
-      `}</style>
-      <p
-        style={{
-          fontSize: 14,
-          fontWeight: 500,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase" as const,
-          color: "var(--accent)",
-          marginBottom: 40,
-        }}
-      >
-        Projects
-      </p>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
-          gap: 16,
-        }}
-      >
-        {projects.map((p) => {
-          const Tag = p.url ? "a" : "div";
-          return (
-            <Tag
-              key={p.num}
-              {...(p.url
-                ? { href: p.url, target: "_blank", rel: "noopener noreferrer" }
-                : {})}
-              className={`proj-card${p.url ? " linked" : ""}`}
-            >
-              {p.url && (
-                <div className="proj-arrow">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5"
-                      stroke="#080808"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+    <section id="work" className="sec" ref={root}>
+      <div className="shell">
+        <div className="secHead">
+          <div className="top">
+            <p className="eyebrow">{t.work.eyebrow}</p>
+            <span className="idx">03 / 06</span>
+          </div>
+          <h2 className="h2">{t.work.h}</h2>
+        </div>
+
+        <div className={styles.list}>
+          {PROJECTS.map((project, i) => {
+            const copy = t.work.items[project.id];
+            const body = (
+              <>
+                <span className={styles.n}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className={styles.name}>{copy.name}</h3>
+                  <span className={styles.host}>{copy.host}</span>
                 </div>
-              )}
-              <span
-                style={{
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: "var(--accent)",
-                  letterSpacing: "0.1em",
-                }}
+                <div>
+                  <p className={styles.desc}>{copy.desc}</p>
+                  <div className="chips">
+                    {project.tags.map((tag) => (
+                      <span className="chip" key={tag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <span className={styles.state}>
+                  <i className={project.live ? styles.live : undefined}>
+                    {copy.state}
+                  </i>
+                </span>
+              </>
+            );
+
+            return project.url ? (
+              <a
+                key={project.id}
+                className={styles.item}
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {p.num}
-              </span>
-              <p
-                style={{
-                  fontFamily: "'Syne',sans-serif",
-                  fontWeight: 700,
-                  fontSize: 16,
-                  color: "var(--text)",
-                }}
-              >
-                {p.name}
-              </p>
-              <p
-                style={{
-                  fontSize: 14,
-                  fontWeight: 300,
-                  lineHeight: 1.65,
-                  color: "var(--muted)",
-                  flex: 1,
-                }}
-              >
-                {p.desc}
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap" as const,
-                  gap: 6,
-                  paddingTop: 6,
-                  borderTop: "1px solid var(--border)",
-                }}
-              >
-                {p.tags.map((t) => (
-                  <span
-                    key={t}
-                    style={{
-                      fontSize: 12,
-                      padding: "4px 10px",
-                      border: "1px solid var(--border)",
-                      borderRadius: 100,
-                      color: "var(--accent)",
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
+                {body}
+              </a>
+            ) : (
+              <div key={project.id} className={styles.item}>
+                {body}
               </div>
-            </Tag>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

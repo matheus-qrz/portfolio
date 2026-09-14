@@ -1,17 +1,76 @@
+"use client";
+
+import Image from "next/image";
+import { useRef } from "react";
+import { emphasize, useI18n } from "@/lib/i18n";
+import { useReveal } from "@/hooks/useReveal";
+import styles from "./About.module.css";
+
 export default function About() {
+  const root = useRef<HTMLElement>(null);
+  const { t } = useI18n();
+
+  useReveal(root, [
+    { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
+    {
+      selector: `.${styles.portrait} img`,
+      trigger: "#about",
+      start: "top 78%",
+      x: -22,
+      y: 0,
+      duration: 1.15,
+    },
+    {
+      selector: `.${styles.caption}`,
+      trigger: "#about",
+      start: "top 78%",
+      y: 10,
+      duration: 0.7,
+      delay: 0.35,
+      ease: "power3.out",
+    },
+    {
+      selector: `.${styles.body} p`,
+      start: "top 88%",
+      y: 18,
+      stagger: 0.09,
+      duration: 0.7,
+    },
+  ]);
+
   return (
-    <section id="about" style={{ position:"relative", zIndex:1, maxWidth:960, margin:"0 auto", padding:"80px 48px", borderTop:"1px solid var(--border)" }}>
-      <p style={{ fontSize:10, fontWeight:500, letterSpacing:"0.18em", textTransform:"uppercase" as const, color:"var(--accent)", marginBottom:40 }}>About</p>
-      <p style={{ fontSize:17, fontWeight:300, lineHeight:1.85, color:"var(--muted)", maxWidth:560 }}>
-        I&apos;ve been shipping production code across startups and my own products for years.
-        Currently working full-time as a{" "}
-        <strong style={{ color:"var(--text)", fontWeight:500 }}>frontend engineer at Wisecare</strong>{" "}
-        while running my own software business — building SaaS platforms from scratch,
-        taking on select <strong style={{ color:"var(--text)", fontWeight:500 }}>freelance projects</strong>,
-        and working closely with design systems and complex state management.
-        I actively integrate <strong style={{ color:"var(--text)", fontWeight:500 }}>AI tools</strong> into
-        my workflow and products — from LLM APIs to AI-assisted development — to ship faster and build smarter.
-      </p>
+    <section id="about" className="sec" ref={root}>
+      <div className="shell">
+        <div className="secHead">
+          <div className="top">
+            <p className="eyebrow">{t.about.eyebrow}</p>
+            <span className="idx">04 / 06</span>
+          </div>
+        </div>
+
+        <div className={styles.grid}>
+          <figure className={styles.portrait}>
+            <Image
+              src="/matheus.jpeg"
+              alt="Matheus Oliveira"
+              width={620}
+              height={826}
+              sizes="(max-width: 1000px) 330px, 370px"
+              priority={false}
+            />
+            <figcaption className={styles.caption}>
+              <b>Matheus Oliveira</b>
+              <span>{t.about.caption}</span>
+            </figcaption>
+          </figure>
+
+          <div className={styles.body}>
+            {t.about.paras.map((para, i) => (
+              <p key={i}>{emphasize(para)}</p>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

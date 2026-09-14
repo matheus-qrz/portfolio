@@ -1,24 +1,33 @@
-"use client";
-import { useReveal } from "@/hooks/useReveal";
-import Nav from "@/components/Nav";
-import Hero from "@/components/Hero";
 import About from "@/components/About";
-import Stack from "@/components/Stack";
-import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
+import Experience from "@/components/Experience";
+import Hero from "@/components/Hero";
+import Manifest from "@/components/Manifest";
+import Nav from "@/components/Nav";
+import PrintDemo from "@/components/PrintDemo";
+import Projects from "@/components/Projects";
+import Rails from "@/components/Rails";
+import SmoothScroll from "@/components/SmoothScroll";
+import { LocaleProvider } from "@/lib/i18n";
 
 export default function Home() {
-  useReveal();
   return (
-    <main>
+    <LocaleProvider>
+      <SmoothScroll />
+      <Rails />
       <Nav />
-      <Hero />
-      <About />
-      <Stack />
-      <Projects />
-      <Experience />
-      <Contact />
-    </main>
+      <main>
+        <Hero />
+        <div className="shell">
+          <div className="rule" />
+        </div>
+        <Manifest />
+        <PrintDemo />
+        <Projects />
+        <About />
+        <Experience />
+        <Contact />
+      </main>
+    </LocaleProvider>
   );
 }
