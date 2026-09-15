@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BYTES, RECEIPT_LINES } from "@/lib/content";
+import { BYTES, RECEIPT_LINES, sectionIndex } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
 import styles from "./PrintDemo.module.css";
@@ -77,7 +77,7 @@ export default function PrintDemo() {
         <div className="secHead">
           <div className="top">
             <p className="eyebrow">{t.print.eyebrow}</p>
-            <span className="idx">02 / 06</span>
+            <span className="idx">{sectionIndex("print")}</span>
           </div>
           <h2 className="h2">{t.print.h}</h2>
           <p className="lede">{t.print.lede}</p>

@@ -1,0 +1,270 @@
+/* Layout flutuante: o slide não mora dentro de um card. O que separa um
+   produto do outro é o espaço e a régua dos controles, não uma borda. */
+.carousel {
+  position: relative;
+}
+
+.stage {
+  display: grid;
+}
+
+.slide {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(22px, 4vw, 64px);
+  align-items: start;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.45s;
+}
+
+.slide.on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+/* ── coluna da esquerda: setor, wordmark, print ─────────────────────── */
+.sector {
+  margin: 0 0 10px;
+  font-family: var(--f-label);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.wordmark {
+  margin: 0;
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 115, "wght" 780;
+  font-size: clamp(30px, 4.4vw, 52px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--paper);
+}
+
+.tf {
+  color: var(--red);
+}
+
+/* A caixa tem proporção fixa mesmo quando não há imagem: é ela que
+   impede a página e os controles de pularem entre um slide com print e
+   um sem. 16:10 é o padrão de captura de 1440×900 do roadmap. */
+.shot {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  margin-top: clamp(16px, 2.4vh, 26px);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--ink-2);
+  overflow: hidden;
+}
+
+/* Proporção diferente de 16:10 é cortada a partir do canto superior
+   esquerdo — o que importa preservar fica em cima e à esquerda. */
+.img {
+  object-fit: cover;
+  object-position: top left;
+}
+
+.pending {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 9px,
+    rgba(70, 59, 51, 0.24) 9px 10px
+  );
+}
+
+/* ── coluna da direita: texto, stack, links ─────────────────────────── */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: clamp(0px, 1.2vw, 14px);
+}
+
+.blurb {
+  margin: 0;
+  font-size: clamp(15px, 1.18vw, 17.5px);
+  line-height: 1.72;
+  color: var(--dim-hi);
+  max-width: 54ch;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 2px;
+}
+
+.link {
+  font-family: var(--f-label);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone);
+  border: 1px solid var(--line-2);
+  border-radius: 2px;
+  padding: 11px 18px;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.16s;
+}
+
+.link:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper);
+  transform: translateY(-2px);
+}
+
+.state {
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.state i {
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.state i::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dimmer);
+}
+
+.state i.live::before {
+  background: var(--red);
+}
+
+/* ── controles ─────────────────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px clamp(14px, 2.4vw, 26px);
+  margin-top: clamp(24px, 3.6vh, 40px);
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.arrows {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+.arrow {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--bone);
+  background: none;
+  border: 1px solid var(--line-2);
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.arrow:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper);
+}
+
+.names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  flex: 1 1 auto;
+}
+
+.name {
+  font-family: var(--f-label);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 7px 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.name:hover {
+  color: var(--bone);
+}
+
+.nameOn {
+  color: var(--paper);
+  border-bottom-color: var(--red);
+}
+
+.count {
+  margin: 0;
+  flex: none;
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+}
+
+.count b {
+  color: var(--red);
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .slide {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .right {
+    padding-top: 0;
+  }
+  .count {
+    display: none;
+  }
+}

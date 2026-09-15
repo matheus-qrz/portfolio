@@ -2,17 +2,8 @@
 
 import { useScrollState } from "@/hooks/useScrollState";
 import { useI18n } from "@/lib/i18n";
-import type { SectionId } from "@/lib/content";
+import { NAV_ITEMS } from "@/lib/content";
 import styles from "./Nav.module.css";
-
-const NAV_ITEMS: Exclude<SectionId, "hero">[] = [
-  "build",
-  "print",
-  "work",
-  "about",
-  "path",
-  "contact",
-];
 
 export default function Nav() {
   const { locale, setLocale, t } = useI18n();

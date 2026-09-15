@@ -37,18 +37,26 @@ export const BYTES: { hex: string; cmd: string }[] = [
   { hex: "1D 56 41 10", cmd: "GS V A 16" },
 ];
 
-export const PROJECTS: {
+export interface Project {
   id: string;
   url?: string;
   repo?: string;
   tags: string[];
   live: boolean;
-}[] = [
+  /**
+   * Existe uma captura em `public/shots/<id>.png`. Ligar esta flag é a
+   * única coisa a fazer quando o print chega: nenhum componente muda.
+   */
+  shot?: boolean;
+}
+
+export const PROJECTS: Project[] = [
   {
     id: "tableflow",
     url: "https://tableflow.software",
     tags: ["Next.js", "TypeScript", "Stripe", "AWS", "ESC/POS"],
     live: true,
+    shot: true,
   },
   {
     id: "meirendeu",
@@ -87,17 +95,55 @@ export const PROJECTS: {
   { id: "copa", tags: ["Next.js", "IA", "Stripe"], live: true },
 ];
 
+const OWN_PRODUCTS = new Set([
+  "tableflow",
+  "meirendeu",
+  "servin",
+  "tijolo",
+  "copa",
+]);
+
+/**
+ * Os cinco produtos próprios, na ordem em que aparecem em PROJECTS.
+ * Filtrar em vez de procurar id a id mantém uma lista só como fonte:
+ * um id errado some do carrossel em vez de derrubar a página.
+ */
+export const SHOWCASE: Project[] = PROJECTS.filter((p) =>
+  OWN_PRODUCTS.has(p.id),
+);
+
+/**
+ * A ordem real da página, de cima para baixo. Lógica de página de venda:
+ * gancho, prova, pedido, e só depois o detalhe para quem quiser mais.
+ * Tudo que numera ou navega seção deriva daqui.
+ */
 export const SECTIONS = [
   "hero",
-  "build",
-  "print",
+  "showcase",
+  "contact",
   "work",
+  "print",
   "about",
   "path",
-  "contact",
 ] as const;
 
 export type SectionId = (typeof SECTIONS)[number];
+export type NavId = Exclude<SectionId, "hero">;
+
+/** Seções navegáveis: a página inteira menos o topo. */
+export const NAV_ITEMS: NavId[] = SECTIONS.filter(
+  (id): id is NavId => id !== "hero",
+);
+
+/**
+ * O "03 / 06" dos cabeçalhos. Derivado da ordem acima em vez de escrito
+ * à mão em cada componente — reordenar a página não deixa mais a
+ * numeração mentindo.
+ */
+export function sectionIndex(id: NavId): string {
+  const total = String(NAV_ITEMS.length).padStart(2, "0");
+  return `${String(NAV_ITEMS.indexOf(id) + 1).padStart(2, "0")} / ${total}`;
+}
 
 export const LINKS = {
   email: "mthsqrz97@gmail.com",
@@ -124,11 +170,19 @@ export interface Content {
     railLabel: string;
     rail: Record<string, string>;
   };
-  build: {
+  showcase: {
     eyebrow: string;
     h: string;
     lede: string;
-    rows: { layer: string; tool: string; role: string }[];
+    sectors: Record<string, string>;
+    blurbs: Record<string, string>;
+    visit: string;
+    repo: string;
+    prev: string;
+    next: string;
+    pick: string;
+    noShot: string;
+    counter: string;
   };
   print: {
     eyebrow: string;
@@ -180,25 +234,26 @@ export interface Content {
     };
   };
   footerMid: string;
+  footer: { line: string; cta: string };
 }
 
 const pt: Content = {
   nav: {
-    build: "Stack",
-    print: "Demo",
+    showcase: "Produtos",
+    contact: "Orçamento",
     work: "Projetos",
+    print: "Demo",
     about: "Sobre",
     path: "Trajetória",
-    contact: "Orçamento",
   },
   navLabel: {
     hero: "INÍCIO",
-    build: "STACK",
-    print: "COMANDA",
+    showcase: "PRODUTOS",
+    contact: "ORÇAMENTO",
     work: "PROJETOS",
+    print: "COMANDA",
     about: "SOBRE",
     path: "TRAJETÓRIA",
-    contact: "ORÇAMENTO",
   },
   status: "Aceitando projetos",
   hero: {
@@ -248,67 +303,36 @@ const pt: Content = {
       copa: "geração por IA",
     },
   },
-  build: {
-    eyebrow: "Manifesto de build",
-    h: "O que entra em cada camada",
-    lede: "Uma stack pequena, escolhida para durar. Nada aqui está na lista porque eu li sobre — está porque tem algo meu em produção usando.",
-    rows: [
-      {
-        layer: "Interface",
-        tool: "React 19 · Next.js 15",
-        role: "App Router, server components, streaming",
-      },
-      {
-        layer: "Estilo",
-        tool: "Tailwind CSS v4",
-        role: "Tokens e design system próprio por produto",
-      },
-      {
-        layer: "Contratos",
-        tool: "TypeScript · Zod",
-        role: "Validação da borda até o banco — inclusive no formulário aqui embaixo",
-      },
-      {
-        layer: "Estado",
-        tool: "React Query · Zustand",
-        role: "Cache de servidor separado do estado de tela",
-      },
-      {
-        layer: "Servidor",
-        tool: "Node.js · Express · MongoDB",
-        role: "APIs, workers e filas de impressão",
-      },
-      {
-        layer: "Infra",
-        tool: "AWS S3 · CloudFront · SES",
-        role: "Mídia, entrega e e-mail transacional",
-      },
-      {
-        layer: "Deploy",
-        tool: "Vercel · Railway",
-        role: "Preview por PR, worker sempre de pé",
-      },
-      {
-        layer: "Dinheiro",
-        tool: "Stripe",
-        role: "Assinaturas, webhooks, faturas e inadimplência",
-      },
-      {
-        layer: "Mensageria",
-        tool: "WhatsApp · IA",
-        role: "Conversa como interface, quando o cliente não quer mais um app",
-      },
-      {
-        layer: "Hardware",
-        tool: "ESC/POS · 58 / 80 mm",
-        role: "Impressora térmica falando direto com o backend",
-      },
-      {
-        layer: "Fluxo",
-        tool: "Claude Code",
-        role: "Spec escrita antes, PR revisado depois",
-      },
-    ],
+  showcase: {
+    eyebrow: "Produtos próprios",
+    h: "Cinco sistemas que eu construí e mantenho",
+    lede: "Não são estudos de caso de agência. São produtos meus, com cliente pagando, servidor de pé e o suporte comigo. Cada um começou numa regra que o setor nunca escreveu em lugar nenhum.",
+    sectors: {
+      tableflow: "Restaurante e bar",
+      meirendeu: "Fiscal · MEI",
+      servin: "Hotelaria",
+      tijolo: "Imobiliário",
+      copa: "Geração por IA",
+    },
+    blurbs: {
+      tableflow:
+        "O cliente senta, lê o QR da mesa e pede sozinho. O pedido cai impresso na cozinha em papel térmico de 58 mm, na comanda de 32 colunas, e aparece no painel do salão no mesmo instante. Balcão e delivery entram na mesma fila. No fim do mês o restaurante recebe o relatório de venda por item e a assinatura é cobrada no cartão sem eu tocar em nada. É onde tudo que eu aprendi sobre operação de restaurante está escrito em código.",
+      meirendeu:
+        "O microempreendedor manda “vendi 300 hoje” no WhatsApp e acabou: a IA entende, categoriza, lança no caixa e guarda. No dia 15 ela lembra do DAS. Quando o faturamento do ano encosta no teto de R$ 81 mil, ela avisa antes de virar problema com a Receita. Sem instalar app, sem planilha, sem aprender a usar nada — a interface é a conversa que ele já tem no bolso.",
+      servin:
+        "Pousada e hotel têm o mesmo gargalo: o hóspede liga para a recepção e a recepção vira telefonista. Aqui ele lê o QR do quarto e pede direto. O chamado vai para o setor certo — cozinha, governança, manutenção — e sai impresso lá dentro. A recepção acompanha tudo num painel só e para de ser intermediária de cada pedido de toalha.",
+      tijolo:
+        "Comprar ou alugar é a maior decisão financeira da vida da maioria das pessoas, e quase todo mundo decide no achismo. A calculadora compara os dois cenários com juros, ITBI, custo de oportunidade da entrada e valorização do imóvel, e devolve um relatório em PDF que dá para levar ao banco. Ferramenta paga, estática, sem backend: carrega em segundos e não tem servidor para cair.",
+      copa:
+        "Micro-SaaS de ciclo curto: o usuário sobe uma foto, paga uma vez e recebe a própria figurinha da Copa 2026 em segundos. Todo o valor está no pipeline — fila de geração por IA, tratamento da imagem, entrega e cobrança avulsa — rodando rápido o bastante para ninguém desistir no meio.",
+    },
+    visit: "Abrir o site",
+    repo: "Ver o código",
+    prev: "Produto anterior",
+    next: "Próximo produto",
+    pick: "Escolher produto",
+    noShot: "Captura a caminho",
+    counter: "Produto",
   },
   print: {
     eyebrow: "Demonstração ao vivo",
@@ -453,25 +477,29 @@ const pt: Content = {
     },
   },
   footerMid: "Next.js · GSAP · Lenis",
+  footer: {
+    line: "Se alguma coisa aqui se parece com o seu problema, o formulário está logo acima.",
+    cta: "Pedir um orçamento",
+  },
 };
 
 const en: Content = {
   nav: {
-    build: "Stack",
-    print: "Demo",
+    showcase: "Products",
+    contact: "Get a quote",
     work: "Work",
+    print: "Demo",
     about: "About",
     path: "Track record",
-    contact: "Get a quote",
   },
   navLabel: {
     hero: "INDEX",
-    build: "STACK",
-    print: "PRINT",
+    showcase: "PRODUCTS",
+    contact: "QUOTE",
     work: "WORK",
+    print: "PRINT",
     about: "ABOUT",
     path: "PATH",
-    contact: "QUOTE",
   },
   status: "Taking on projects",
   hero: {
@@ -521,67 +549,36 @@ const en: Content = {
       copa: "AI generation",
     },
   },
-  build: {
-    eyebrow: "Build manifest",
-    h: "What goes into each layer",
-    lede: "A small stack, chosen to last. Nothing here is on the list because I read about it — it's here because something of mine runs on it in production.",
-    rows: [
-      {
-        layer: "Interface",
-        tool: "React 19 · Next.js 15",
-        role: "App Router, server components, streaming",
-      },
-      {
-        layer: "Styling",
-        tool: "Tailwind CSS v4",
-        role: "Tokens and a per-product design system",
-      },
-      {
-        layer: "Contracts",
-        tool: "TypeScript · Zod",
-        role: "Validation from the edge down — including the form below",
-      },
-      {
-        layer: "State",
-        tool: "React Query · Zustand",
-        role: "Server cache kept apart from screen state",
-      },
-      {
-        layer: "Server",
-        tool: "Node.js · Express · MongoDB",
-        role: "APIs, workers and print queues",
-      },
-      {
-        layer: "Infra",
-        tool: "AWS S3 · CloudFront · SES",
-        role: "Media, delivery and transactional email",
-      },
-      {
-        layer: "Deploy",
-        tool: "Vercel · Railway",
-        role: "Preview per PR, worker always up",
-      },
-      {
-        layer: "Money",
-        tool: "Stripe",
-        role: "Subscriptions, webhooks, invoices and dunning",
-      },
-      {
-        layer: "Messaging",
-        tool: "WhatsApp · AI",
-        role: "Conversation as the interface, when nobody wants another app",
-      },
-      {
-        layer: "Hardware",
-        tool: "ESC/POS · 58 / 80 mm",
-        role: "Thermal printer talking straight to the backend",
-      },
-      {
-        layer: "Workflow",
-        tool: "Claude Code",
-        role: "Spec written first, PR reviewed after",
-      },
-    ],
+  showcase: {
+    eyebrow: "My own products",
+    h: "Five systems I built and still run",
+    lede: "These aren't agency case studies. They're my products, with paying customers, servers I keep up and support that comes to me. Each one started from a rule its sector had never written down.",
+    sectors: {
+      tableflow: "Restaurants & bars",
+      meirendeu: "Tax · sole traders",
+      servin: "Hospitality",
+      tijolo: "Real estate",
+      copa: "AI generation",
+    },
+    blurbs: {
+      tableflow:
+        "A guest sits down, scans the QR code on the table and orders without waiting for anyone. The order prints in the kitchen on 58 mm thermal paper, in the 32-column ticket layout, and lands on the floor dashboard at the same moment. Counter and delivery join the same queue. At month end the restaurant gets per-item sales reporting and the subscription charges itself. It's where everything I've learned about running a restaurant is written down as code.",
+      meirendeu:
+        "A sole trader texts “sold 300 today” on WhatsApp and that's it: the AI parses it, categorises it, books it and keeps it. On the 15th it chases the monthly tax. When the year's revenue approaches the R$81k legal ceiling, it says so before that becomes a problem with the tax office. No app to install, no spreadsheet, nothing new to learn — the interface is the conversation already in their pocket.",
+      servin:
+        "Guesthouses and hotels share one bottleneck: the guest calls the front desk, and the front desk becomes a switchboard. Here the guest scans the room's QR code and asks directly. The request routes to the right department — kitchen, housekeeping, maintenance — and prints there. The front desk watches everything on one board instead of relaying every towel request.",
+      tijolo:
+        "Buying versus renting is the biggest financial decision most people ever make, and almost everyone makes it on a hunch. The calculator compares both scenarios with interest, transfer tax, the opportunity cost of the deposit and property appreciation, then returns a PDF report you can take to the bank. Paid tool, fully static, no backend: it loads in seconds and has no server to fall over.",
+      copa:
+        "A short-cycle micro-SaaS: the user uploads a photo, pays once and gets their own World Cup 2026 sticker back in seconds. All the value is in the pipeline — the AI generation queue, image handling, delivery and one-off billing — running fast enough that nobody abandons halfway.",
+    },
+    visit: "Open the site",
+    repo: "See the code",
+    prev: "Previous product",
+    next: "Next product",
+    pick: "Pick a product",
+    noShot: "Screenshot on the way",
+    counter: "Product",
   },
   print: {
     eyebrow: "Live demo",
@@ -726,6 +723,10 @@ const en: Content = {
     },
   },
   footerMid: "Next.js · GSAP · Lenis",
+  footer: {
+    line: "If any of this looks like your problem, the form is just above.",
+    cta: "Get a quote",
+  },
 };
 
 export const content: Record<Locale, Content> = { pt, en };

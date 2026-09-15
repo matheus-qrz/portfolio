@@ -1,30 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SHOWCASE } from "@/lib/content";
 import { emphasize, useI18n } from "@/lib/i18n";
+import Wordmark from "./Wordmark";
 import styles from "./Hero.module.css";
-
-/**
- * Faixa de produtos. O Tableflow tem o acento laranja da própria marca;
- * os outros são wordmarks simples, para a faixa ler como um conjunto.
- */
-const RAIL: { id: string; url?: string; label: ReactNode }[] = [
-  {
-    id: "tableflow",
-    url: "https://tableflow.software",
-    label: (
-      <>
-        table<span className={styles.tf}>flow</span>
-      </>
-    ),
-  },
-  { id: "meirendeu", url: "https://mei-rendeu.com.br", label: "MEI Rendeu" },
-  { id: "servin", label: "Servin" },
-  { id: "tijolo", url: "https://valeotijolo.com.br", label: "Vale o Tijolo?" },
-  { id: "copa", label: "Copa AI" },
-];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -116,10 +98,18 @@ export default function Hero() {
         <div className={styles.rail}>
           <p className={styles.railLabel}>{t.hero.railLabel}</p>
           <div className={styles.railItems}>
-            {RAIL.map((p) => {
+            {/* Mesma lista do carrossel, mesma ordem: a faixa é o índice
+                do que vem logo abaixo. */}
+            {SHOWCASE.map((p) => {
               const body = (
                 <span>
-                  <span className={styles.wordmark}>{p.label}</span>
+                  <span className={styles.wordmark}>
+                    <Wordmark
+                      id={p.id}
+                      name={t.work.items[p.id].name}
+                      accent={styles.tf}
+                    />
+                  </span>
                   <span className={styles.desc}>{t.hero.rail[p.id]}</span>
                 </span>
               );
