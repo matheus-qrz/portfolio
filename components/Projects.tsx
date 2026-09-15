@@ -24,20 +24,37 @@ export default function Projects() {
             <span className="idx">03 / 06</span>
           </div>
           <h2 className="h2">{t.work.h}</h2>
+          <p className="lede">{t.work.lede}</p>
         </div>
 
         <div className={styles.list}>
           {PROJECTS.map((project, i) => {
             const copy = t.work.items[project.id];
-            const body = (
-              <>
+            return (
+              <div className={styles.item} key={project.id}>
                 <span className={styles.n}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
+
                 <div>
                   <h3 className={styles.name}>{copy.name}</h3>
-                  <span className={styles.host}>{copy.host}</span>
+                  {/* Os links ficam explícitos em vez de a linha inteira ser
+                      uma âncora: um projeto pode ter site e repositório, e
+                      âncora dentro de âncora é HTML inválido. */}
+                  {project.url ? (
+                    <a
+                      className={`${styles.host} ${styles.hostLink}`}
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {copy.host}
+                    </a>
+                  ) : (
+                    <span className={styles.host}>{copy.host}</span>
+                  )}
                 </div>
+
                 <div>
                   <p className={styles.desc}>{copy.desc}</p>
                   <div className="chips">
@@ -48,27 +65,22 @@ export default function Projects() {
                     ))}
                   </div>
                 </div>
+
                 <span className={styles.state}>
                   <i className={project.live ? styles.live : undefined}>
                     {copy.state}
                   </i>
+                  {project.repo && (
+                    <a
+                      className={styles.repo}
+                      href={project.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t.work.repo} ↗
+                    </a>
+                  )}
                 </span>
-              </>
-            );
-
-            return project.url ? (
-              <a
-                key={project.id}
-                className={styles.item}
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {body}
-              </a>
-            ) : (
-              <div key={project.id} className={styles.item}>
-                {body}
               </div>
             );
           })}

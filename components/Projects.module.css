@@ -56,9 +56,20 @@
 }
 
 .host {
+  display: inline-block;
   font-family: var(--f-mono);
   font-size: 11.5px;
   color: var(--red);
+  text-decoration: none;
+}
+
+.hostLink {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.hostLink:hover {
+  border-bottom-color: var(--red);
 }
 
 .desc {
@@ -83,6 +94,24 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.repo {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-2);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.repo:hover {
+  color: var(--red);
+  border-color: var(--red);
 }
 
 .state i::before {
