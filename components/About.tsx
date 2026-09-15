@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
+import { sectionIndex } from "@/lib/content";
 import { emphasize, useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
 import styles from "./About.module.css";
@@ -44,7 +45,7 @@ export default function About() {
         <div className="secHead">
           <div className="top">
             <p className="eyebrow">{t.about.eyebrow}</p>
-            <span className="idx">04 / 06</span>
+            <span className="idx">{sectionIndex("about")}</span>
           </div>
         </div>
 

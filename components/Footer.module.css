@@ -1,0 +1,65 @@
+/* Fecha a página devolvendo o leitor ao formulário, que agora está
+   no meio — quem rolou até aqui não deveria ter que caçar o caminho. */
+.close {
+  margin-top: clamp(40px, 6vh, 72px);
+  padding-top: clamp(24px, 4vh, 36px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.closeText {
+  margin: 0;
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 110, "wght" 700;
+  font-size: clamp(18px, 2vw, 26px);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--paper);
+  max-width: 34ch;
+  text-wrap: balance;
+}
+
+.closeCta {
+  font-family: var(--f-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper);
+  background: var(--red);
+  border: 1px solid var(--red);
+  padding: 14px 24px;
+  border-radius: 2px;
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.16s;
+}
+
+.closeCta:hover {
+  background: var(--paper);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 22px 30px;
+  margin-top: clamp(28px, 4vh, 44px);
+  border-top: 1px solid var(--line);
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+}

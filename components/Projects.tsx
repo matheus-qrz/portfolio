@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { PROJECTS } from "@/lib/content";
+import { PROJECTS, sectionIndex } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
 import styles from "./Projects.module.css";
@@ -21,7 +21,7 @@ export default function Projects() {
         <div className="secHead">
           <div className="top">
             <p className="eyebrow">{t.work.eyebrow}</p>
-            <span className="idx">03 / 06</span>
+            <span className="idx">{sectionIndex("work")}</span>
           </div>
           <h2 className="h2">{t.work.h}</h2>
           <p className="lede">{t.work.lede}</p>

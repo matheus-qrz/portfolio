@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import { LINKS } from "@/lib/content";
+import { LINKS, sectionIndex } from "@/lib/content";
 import { fieldErrors, type FieldName } from "@/lib/quote";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
@@ -79,7 +79,7 @@ export default function Contact() {
           <div className="secHead">
             <div className="top">
               <p className="eyebrow">{t.contact.eyebrow}</p>
-              <span className="idx">06 / 06</span>
+              <span className="idx">{sectionIndex("contact")}</span>
             </div>
             <h2 className="h2">{t.contact.h}</h2>
             <p className="lede">{t.contact.lede}</p>
@@ -225,13 +225,6 @@ export default function Contact() {
         </div>
       </section>
 
-      <div className="shell">
-        <footer className={styles.footer}>
-          <span>© {new Date().getFullYear()} Matheus Oliveira</span>
-          <span>{t.footerMid}</span>
-          <span className="num">−7.1195, −34.8450</span>
-        </footer>
-      </div>
     </>
   );
 }

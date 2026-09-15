@@ -1,12 +1,13 @@
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Experience from "@/components/Experience";
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import Manifest from "@/components/Manifest";
 import Nav from "@/components/Nav";
 import PrintDemo from "@/components/PrintDemo";
 import Projects from "@/components/Projects";
 import Rails from "@/components/Rails";
+import Showcase from "@/components/Showcase";
 import SmoothScroll from "@/components/SmoothScroll";
 import { LocaleProvider } from "@/lib/i18n";
 
@@ -21,12 +22,14 @@ export default function Home() {
         <div className="shell">
           <div className="rule" />
         </div>
-        <Manifest />
-        <PrintDemo />
+        {/* Prova primeiro, pedido logo depois, detalhe para quem quiser mais. */}
+        <Showcase />
+        <Contact />
         <Projects />
+        <PrintDemo />
         <About />
         <Experience />
-        <Contact />
+        <Footer />
       </main>
     </LocaleProvider>
   );

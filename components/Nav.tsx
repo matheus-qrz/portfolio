@@ -2,17 +2,13 @@
 
 import { useScrollState } from "@/hooks/useScrollState";
 import { useI18n } from "@/lib/i18n";
-import type { SectionId } from "@/lib/content";
+import { SECTIONS, type SectionId } from "@/lib/content";
 import styles from "./Nav.module.css";
 
-const NAV_ITEMS: Exclude<SectionId, "hero">[] = [
-  "build",
-  "print",
-  "work",
-  "about",
-  "path",
-  "contact",
-];
+// Derivado de SECTIONS: a ordem do nav acompanha a ordem da página.
+const NAV_ITEMS = SECTIONS.filter(
+  (s): s is Exclude<SectionId, "hero"> => s !== "hero",
+);
 
 export default function Nav() {
   const { locale, setLocale, t } = useI18n();

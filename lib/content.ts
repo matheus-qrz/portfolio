@@ -41,12 +41,18 @@ export const PROJECTS: {
   id: string;
   url?: string;
   repo?: string;
+  /**
+   * Marque `true` depois de soltar `public/shots/<id>.png`. O caminho é
+   * por convenção — não precisa mexer em componente para o print aparecer.
+   */
+  shot?: true;
   tags: string[];
   live: boolean;
 }[] = [
   {
     id: "tableflow",
     url: "https://tableflow.software",
+    shot: true,
     tags: ["Next.js", "TypeScript", "Stripe", "AWS", "ESC/POS"],
     live: true,
   },
@@ -89,15 +95,34 @@ export const PROJECTS: {
 
 export const SECTIONS = [
   "hero",
-  "build",
-  "print",
+  "showcase",
+  "contact",
   "work",
+  "print",
   "about",
   "path",
-  "contact",
 ] as const;
 
 export type SectionId = (typeof SECTIONS)[number];
+
+/** Produtos que entram no carrossel, na ordem de exibição. */
+export const SHOWCASE = [
+  "tableflow",
+  "meirendeu",
+  "servin",
+  "tijolo",
+  "copa",
+] as const;
+
+/**
+ * "03 / 06" derivado de SECTIONS em vez de escrito à mão em cada
+ * componente — reordenar a página não deixa mais numeração mentindo.
+ */
+export function sectionIndex(id: Exclude<SectionId, "hero">): string {
+  const list = SECTIONS.filter((s) => s !== "hero");
+  const pos = list.indexOf(id) + 1;
+  return `${String(pos).padStart(2, "0")} / ${String(list.length).padStart(2, "0")}`;
+}
 
 export const LINKS = {
   email: "mthsqrz97@gmail.com",
@@ -124,11 +149,15 @@ export interface Content {
     railLabel: string;
     rail: Record<string, string>;
   };
-  build: {
+  showcase: {
     eyebrow: string;
     h: string;
     lede: string;
-    rows: { layer: string; tool: string; role: string }[];
+    prev: string;
+    next: string;
+    goTo: string;
+    noShot: string;
+    items: Record<string, { sector: string; desc: string }>;
   };
   print: {
     eyebrow: string;
@@ -184,21 +213,21 @@ export interface Content {
 
 const pt: Content = {
   nav: {
-    build: "Stack",
-    print: "Demo",
+    showcase: "Produtos",
+    contact: "Orçamento",
     work: "Projetos",
+    print: "Demo",
     about: "Sobre",
     path: "Trajetória",
-    contact: "Orçamento",
   },
   navLabel: {
     hero: "INÍCIO",
-    build: "STACK",
-    print: "COMANDA",
+    showcase: "PRODUTOS",
+    contact: "ORÇAMENTO",
     work: "PROJETOS",
+    print: "COMANDA",
     about: "SOBRE",
     path: "TRAJETÓRIA",
-    contact: "ORÇAMENTO",
   },
   status: "Aceitando projetos",
   hero: {
@@ -248,67 +277,36 @@ const pt: Content = {
       copa: "geração por IA",
     },
   },
-  build: {
-    eyebrow: "Manifesto de build",
-    h: "O que entra em cada camada",
-    lede: "Uma stack pequena, escolhida para durar. Nada aqui está na lista porque eu li sobre — está porque tem algo meu em produção usando.",
-    rows: [
-      {
-        layer: "Interface",
-        tool: "React 19 · Next.js 15",
-        role: "App Router, server components, streaming",
+  showcase: {
+    eyebrow: "Produtos",
+    h: "O que eu construí, por dentro",
+    lede: "Cinco produtos meus, em cinco setores diferentes. Cada um nasceu de uma operação real que estava sendo tocada na mão.",
+    prev: "Produto anterior",
+    next: "Próximo produto",
+    goTo: "Ir para",
+    noShot: "Captura de tela em produção",
+    items: {
+      tableflow: {
+        sector: "Restaurante e bar",
+        desc: "O garçom parou de anotar em bloco e a cozinha parou de decifrar letra. O cliente pede pelo QR da mesa, a comanda sai impressa na cozinha em segundos, e o dono vê faturamento por mesa, taxa de repedido e ticket médio sem abrir planilha. Cobrança mensal no Stripe, com inadimplência tratada.",
       },
-      {
-        layer: "Estilo",
-        tool: "Tailwind CSS v4",
-        role: "Tokens e design system próprio por produto",
+      meirendeu: {
+        sector: "Fiscal e MEI",
+        desc: "Microempreendedor não quer mais um aplicativo. Então o produto mora no WhatsApp: a pessoa manda “vendi 300 reais hoje” e a IA registra, categoriza e guarda. Lembra do DAS antes do vencimento e avisa quando o faturamento se aproxima do teto de R$ 81 mil — que é onde o MEI costuma se perder.",
       },
-      {
-        layer: "Contratos",
-        tool: "TypeScript · Zod",
-        role: "Validação da borda até o banco — inclusive no formulário aqui embaixo",
+      servin: {
+        sector: "Hotelaria",
+        desc: "Pousada tem o mesmo problema do restaurante, com outra planta: o pedido nasce no quarto e precisa chegar no setor certo. QR por quarto, impresso em cartão de mesa, recepção acompanhando tudo num painel só, e a operação separada por setor para ninguém pisar no pé de ninguém.",
       },
-      {
-        layer: "Estado",
-        tool: "React Query · Zustand",
-        role: "Cache de servidor separado do estado de tela",
+      tijolo: {
+        sector: "Imobiliário",
+        desc: "Comprar ou alugar é uma conta que quase ninguém faz direito, porque ITBI, custo de oportunidade e valorização não cabem na cabeça de uma vez. A ferramenta compara cenários lado a lado e cospe um relatório em PDF. Estática, sem backend: carrega instantâneo e não tem o que quebrar.",
       },
-      {
-        layer: "Servidor",
-        tool: "Node.js · Express · MongoDB",
-        role: "APIs, workers e filas de impressão",
+      copa: {
+        sector: "Geração por IA",
+        desc: "Um micro-SaaS de ciclo curto: o usuário manda uma foto, paga uma vez e recebe a figurinha da Copa 2026 em segundos. Serviu para exercitar pipeline de geração por IA e pagamento avulso sem assinatura — problema diferente dos outros quatro.",
       },
-      {
-        layer: "Infra",
-        tool: "AWS S3 · CloudFront · SES",
-        role: "Mídia, entrega e e-mail transacional",
-      },
-      {
-        layer: "Deploy",
-        tool: "Vercel · Railway",
-        role: "Preview por PR, worker sempre de pé",
-      },
-      {
-        layer: "Dinheiro",
-        tool: "Stripe",
-        role: "Assinaturas, webhooks, faturas e inadimplência",
-      },
-      {
-        layer: "Mensageria",
-        tool: "WhatsApp · IA",
-        role: "Conversa como interface, quando o cliente não quer mais um app",
-      },
-      {
-        layer: "Hardware",
-        tool: "ESC/POS · 58 / 80 mm",
-        role: "Impressora térmica falando direto com o backend",
-      },
-      {
-        layer: "Fluxo",
-        tool: "Claude Code",
-        role: "Spec escrita antes, PR revisado depois",
-      },
-    ],
+    },
   },
   print: {
     eyebrow: "Demonstração ao vivo",
@@ -372,8 +370,8 @@ const pt: Content = {
       freelas: {
         name: "Freelas",
         host: "ferramentas para autônomos",
-        desc: "Monorepo de ferramentas para freelancers brasileiros: calculadora de precificação por hora, gerador de contrato e utilitários de rotina.",
-        state: "Em desenvolvimento",
+        desc: "Monorepo de ferramentas para freelancers brasileiros: calculadora de precificação por hora, gerador de contrato e utilitários de rotina. Construído e entregue; hoje está fora do ar.",
+        state: "Fora do ar",
       },
       lith1um: {
         name: "LITH1UM",
@@ -457,21 +455,21 @@ const pt: Content = {
 
 const en: Content = {
   nav: {
-    build: "Stack",
-    print: "Demo",
+    showcase: "Products",
+    contact: "Get a quote",
     work: "Work",
+    print: "Demo",
     about: "About",
     path: "Track record",
-    contact: "Get a quote",
   },
   navLabel: {
     hero: "INDEX",
-    build: "STACK",
-    print: "PRINT",
+    showcase: "PRODUCTS",
+    contact: "QUOTE",
     work: "WORK",
+    print: "PRINT",
     about: "ABOUT",
     path: "PATH",
-    contact: "QUOTE",
   },
   status: "Taking on projects",
   hero: {
@@ -521,67 +519,36 @@ const en: Content = {
       copa: "AI generation",
     },
   },
-  build: {
-    eyebrow: "Build manifest",
-    h: "What goes into each layer",
-    lede: "A small stack, chosen to last. Nothing here is on the list because I read about it — it's here because something of mine runs on it in production.",
-    rows: [
-      {
-        layer: "Interface",
-        tool: "React 19 · Next.js 15",
-        role: "App Router, server components, streaming",
+  showcase: {
+    eyebrow: "Products",
+    h: "What I built, from the inside",
+    lede: "Five products of mine, across five different sectors. Each one started from a real operation that was being run by hand.",
+    prev: "Previous product",
+    next: "Next product",
+    goTo: "Go to",
+    noShot: "Screenshot in production",
+    items: {
+      tableflow: {
+        sector: "Restaurants & bars",
+        desc: "Waiters stopped writing on notepads and the kitchen stopped deciphering handwriting. Guests order from the table's QR code, the ticket prints in the kitchen within seconds, and the owner sees revenue per table, reorder rate and average spend without opening a spreadsheet. Monthly billing on Stripe, dunning included.",
       },
-      {
-        layer: "Styling",
-        tool: "Tailwind CSS v4",
-        role: "Tokens and a per-product design system",
+      meirendeu: {
+        sector: "Tax & sole traders",
+        desc: "Sole traders don't want another app. So the product lives in WhatsApp: you message “sold 300 today” and the AI logs it, categorises it and keeps it. It chases the monthly tax before the deadline and warns when revenue approaches the legal ceiling — which is exactly where sole traders lose track.",
       },
-      {
-        layer: "Contracts",
-        tool: "TypeScript · Zod",
-        role: "Validation from the edge down — including the form below",
+      servin: {
+        sector: "Hospitality",
+        desc: "A guesthouse has the restaurant's problem on a different floor plan: the order starts in the room and has to reach the right department. A QR per room, printed on a tent card, the front desk watching one board, and operations split by department so nobody steps on anybody.",
       },
-      {
-        layer: "State",
-        tool: "React Query · Zustand",
-        role: "Server cache kept apart from screen state",
+      tijolo: {
+        sector: "Real estate",
+        desc: "Buying versus renting is a calculation almost nobody does properly, because transfer tax, opportunity cost and appreciation don't fit in your head at once. The tool compares scenarios side by side and produces a PDF report. Fully static, no backend: instant load and nothing to break.",
       },
-      {
-        layer: "Server",
-        tool: "Node.js · Express · MongoDB",
-        role: "APIs, workers and print queues",
+      copa: {
+        sector: "AI generation",
+        desc: "A short-cycle micro-SaaS: the user uploads a photo, pays once and gets a World Cup 2026 sticker in seconds. It was a way to work through an AI generation pipeline and one-off payment without subscriptions — a different problem from the other four.",
       },
-      {
-        layer: "Infra",
-        tool: "AWS S3 · CloudFront · SES",
-        role: "Media, delivery and transactional email",
-      },
-      {
-        layer: "Deploy",
-        tool: "Vercel · Railway",
-        role: "Preview per PR, worker always up",
-      },
-      {
-        layer: "Money",
-        tool: "Stripe",
-        role: "Subscriptions, webhooks, invoices and dunning",
-      },
-      {
-        layer: "Messaging",
-        tool: "WhatsApp · AI",
-        role: "Conversation as the interface, when nobody wants another app",
-      },
-      {
-        layer: "Hardware",
-        tool: "ESC/POS · 58 / 80 mm",
-        role: "Thermal printer talking straight to the backend",
-      },
-      {
-        layer: "Workflow",
-        tool: "Claude Code",
-        role: "Spec written first, PR reviewed after",
-      },
-    ],
+    },
   },
   print: {
     eyebrow: "Live demo",
@@ -645,8 +612,8 @@ const en: Content = {
       freelas: {
         name: "Freelas",
         host: "tools for freelancers",
-        desc: "A monorepo of tools for Brazilian freelancers: hourly pricing calculator, contract generator and everyday utilities.",
-        state: "In development",
+        desc: "A monorepo of tools for Brazilian freelancers: hourly pricing calculator, contract generator and everyday utilities. Built and shipped; currently offline.",
+        state: "Offline",
       },
       lith1um: {
         name: "LITH1UM",

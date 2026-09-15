@@ -1,0 +1,223 @@
+/* Sem card: os elementos flutuam sobre o fundo da página. A separação
+   vem do espaço e da escala, não de uma caixa. */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 76px);
+  align-items: center;
+  min-height: clamp(380px, 46vh, 520px);
+}
+
+/* ── identidade + print ────────────────────────────────────────────── */
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mark {
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 112, "wght" 800;
+  font-size: clamp(30px, 3.6vw, 48px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--paper);
+  margin: 0;
+}
+
+.accent {
+  color: #ff6b2b;
+}
+
+.sector {
+  font-family: var(--f-label);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: -8px 0 0;
+}
+
+/* Caixa de proporção fixa: todo print ocupa o mesmo espaço, qualquer que
+   seja a dimensão nativa da captura. Sem isso, um slide com imagem e outro
+   sem fazem a página e os controles pularem a cada troca. */
+.shot {
+  position: relative;
+  margin: 6px 0 0;
+  max-width: 520px;
+  aspect-ratio: 16 / 10;
+}
+
+/* O print flutua: sombra funda e recorte suave na base, sem moldura. */
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: top left;
+  border-radius: 4px;
+  box-shadow: 0 46px 80px -34px rgba(0, 0, 0, 0.95);
+  -webkit-mask-image: linear-gradient(#000 82%, transparent);
+  mask-image: linear-gradient(#000 82%, transparent);
+}
+
+/* ── texto ─────────────────────────────────────────────────────────── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.desc {
+  margin: 0;
+  font-size: clamp(15px, 1.25vw, 17.5px);
+  line-height: 1.72;
+  color: var(--dim-hi);
+  max-width: 58ch;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+}
+
+.link {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: var(--red);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.link:hover {
+  border-bottom-color: var(--red);
+}
+
+.state {
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.state::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dimmer);
+}
+
+.live::before {
+  background: var(--red);
+}
+
+/* ── controles ─────────────────────────────────────────────────────── */
+.controls {
+  margin-top: clamp(26px, 4vh, 44px);
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.arrow {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--line-2);
+  border-radius: 2px;
+  color: var(--bone);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
+}
+
+.arrow:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.arrow svg {
+  width: 15px;
+  height: 15px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+/* O indicador carrega o nome do produto, não um ponto anônimo: dá para
+   saltar direto para o que interessa. */
+.dot {
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-2);
+  color: var(--dimmer);
+  padding: 6px 2px;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.dot:hover {
+  color: var(--bone);
+}
+
+.dot[aria-current="true"] {
+  color: var(--paper);
+  border-bottom-color: var(--red);
+}
+
+.counter {
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--dimmer);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .stage {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    min-height: 0;
+  }
+  .dots {
+    order: 3;
+    flex-basis: 100%;
+  }
+}

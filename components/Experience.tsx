@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { sectionIndex } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
 import styles from "./Experience.module.css";
@@ -20,7 +21,7 @@ export default function Experience() {
         <div className="secHead">
           <div className="top">
             <p className="eyebrow">{t.path.eyebrow}</p>
-            <span className="idx">05 / 06</span>
+            <span className="idx">{sectionIndex("path")}</span>
           </div>
           <h2 className="h2">{t.path.h}</h2>
         </div>
