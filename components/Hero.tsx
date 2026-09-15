@@ -1,11 +1,30 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { emphasize, useI18n } from "@/lib/i18n";
 import styles from "./Hero.module.css";
+
+/**
+ * Faixa de produtos. O Tableflow tem o acento laranja da própria marca;
+ * os outros são wordmarks simples, para a faixa ler como um conjunto.
+ */
+const RAIL: { id: string; url?: string; label: ReactNode }[] = [
+  {
+    id: "tableflow",
+    url: "https://tableflow.software",
+    label: (
+      <>
+        table<span className={styles.tf}>flow</span>
+      </>
+    ),
+  },
+  { id: "meirendeu", url: "https://mei-rendeu.com.br", label: "MEI Rendeu" },
+  { id: "servin", label: "Servin" },
+  { id: "tijolo", url: "https://valeotijolo.com.br", label: "Vale o Tijolo?" },
+  { id: "copa", label: "Copa AI" },
+];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -36,32 +55,15 @@ export default function Hero() {
           "-=0.72",
         )
         .from(
-          `.${styles.frame}`,
-          { y: 34, opacity: 0, scale: 0.97, duration: 1.15 },
-          "-=0.95",
-        )
-        .from(
-          `.${styles.shotCaption}`,
-          { opacity: 0, duration: 0.6 },
-          "-=0.45",
+          `.${styles.domainRow}`,
+          { x: 20, opacity: 0, duration: 0.65, stagger: 0.07 },
+          "-=0.85",
         )
         .from(
           [`.${styles.railLabel}`, `.${styles.product}`],
           { y: 14, opacity: 0, duration: 0.6, stagger: 0.07 },
-          "-=0.7",
+          "-=0.5",
         );
-
-      // Paralaxe leve: o screenshot sobe um pouco mais devagar que a página.
-      gsap.to(`.${styles.shot}`, {
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.6,
-        },
-        y: -46,
-        ease: "none",
-      });
     }, root);
 
     return () => ctx.revert();
@@ -91,75 +93,52 @@ export default function Hero() {
             </div>
           </div>
 
-          <figure className={styles.shot}>
-            <div className={styles.frame}>
-              <div className={styles.bar}>
-                <span className={styles.dots}>
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span className={styles.barLabel}>
-                  tableflow.software / kds
-                </span>
-              </div>
-              <Image
-                src="/tableflow-kds.png"
-                alt="Tela do KDS do Tableflow com pedidos em preparo"
-                width={641}
-                height={605}
-                sizes="(max-width: 1000px) 100vw, 46vw"
-                priority
-              />
-            </div>
-            <figcaption className={styles.shotCaption}>
-              {t.hero.shotCaption}
-            </figcaption>
-          </figure>
+          {/* A prova de versatilidade como informação, não como efeito:
+              cada linha é um setor em que já existe algo entregue. */}
+          <div className={styles.domains}>
+            <p className={styles.domainsLabel}>{t.hero.domainsLabel}</p>
+            <ul className={styles.domainList}>
+              {t.hero.domains.map((d, i) => (
+                <li className={styles.domainRow} key={d.sector}>
+                  <span className={styles.domainNum}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>
+                    <span className={styles.domainSector}>{d.sector}</span>
+                    <span className={styles.domainWhat}>{d.what}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className={styles.rail}>
           <p className={styles.railLabel}>{t.hero.railLabel}</p>
           <div className={styles.railItems}>
-            <a
-              className={styles.product}
-              href="https://tableflow.software"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>
-                <span className={styles.wordmark}>
-                  table<span className={styles.tf}>flow</span>
+            {RAIL.map((p) => {
+              const body = (
+                <span>
+                  <span className={styles.wordmark}>{p.label}</span>
+                  <span className={styles.desc}>{t.hero.rail[p.id]}</span>
                 </span>
-                <span className={styles.desc}>{t.hero.rail.tableflow}</span>
-              </span>
-            </a>
-
-            <span className={styles.product}>
-              <span>
-                <span className={styles.wordmark}>Servin</span>
-                <span className={styles.desc}>{t.hero.rail.servin}</span>
-              </span>
-            </span>
-
-            <a
-              className={styles.product}
-              href="https://valeotijolo.com.br"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>
-                <span className={styles.wordmark}>Vale o Tijolo?</span>
-                <span className={styles.desc}>{t.hero.rail.tijolo}</span>
-              </span>
-            </a>
-
-            <span className={styles.product}>
-              <span>
-                <span className={styles.wordmark}>Copa AI</span>
-                <span className={styles.desc}>{t.hero.rail.copa}</span>
-              </span>
-            </span>
+              );
+              return p.url ? (
+                <a
+                  key={p.id}
+                  className={styles.product}
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {body}
+                </a>
+              ) : (
+                <span key={p.id} className={styles.product}>
+                  {body}
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>

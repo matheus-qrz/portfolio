@@ -152,81 +152,78 @@
   color: var(--paper);
 }
 
-/* ── screenshot do produto ─────────────────────────────────────────── */
-.shot {
-  position: relative;
-  margin: 0;
-}
-
-.shot::before {
-  content: "";
-  position: absolute;
-  inset: -14% -8% -20%;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at 50% 45%,
-    rgba(226, 71, 44, 0.16),
-    transparent 68%
-  );
-}
-
-.frame {
-  border: 1px solid var(--line-2);
-  border-radius: 5px;
-  overflow: hidden;
+/* ── grade de setores ──────────────────────────────────────────────── */
+.domains {
+  border: 1px solid var(--line);
+  border-radius: 3px;
   background: var(--ink-2);
-  box-shadow: 0 44px 84px -34px rgba(0, 0, 0, 0.92);
+  overflow: hidden;
 }
 
-.bar {
-  height: 30px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 12px;
+.domainsLabel {
+  margin: 0;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--line);
+  background: var(--ink-3);
+  font-family: var(--f-label);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.domainList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.domainRow {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 12px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+  transition: background 0.2s;
+}
+
+.domainRow:last-child {
+  border-bottom: 0;
+}
+
+.domainRow:hover {
   background: var(--ink-3);
 }
 
-.dots {
-  display: flex;
-  gap: 5px;
-  flex: none;
-}
-
-.dots i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--line-2);
-}
-
-.barLabel {
-  font-family: var(--f-label);
-  font-size: 8.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.frame img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.shotCaption {
-  margin: 12px 0 0;
+.domainNum {
   font-family: var(--f-label);
   font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
   color: var(--dimmer);
-  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+.domainRow:hover .domainNum {
+  color: var(--red);
+}
+
+.domainSector {
+  display: block;
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 110, "wght" 680;
+  font-size: 15.5px;
+  letter-spacing: -0.015em;
+  color: var(--paper);
+  line-height: 1.25;
+}
+
+.domainWhat {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--dim);
 }
 
 /* ── faixa de produtos ─────────────────────────────────────────────── */
@@ -309,7 +306,7 @@
     grid-template-columns: 1fr;
     gap: 34px;
   }
-  .shot {
+  .domains {
     order: 2;
   }
   .rail {

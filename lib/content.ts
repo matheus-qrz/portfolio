@@ -40,6 +40,7 @@ export const BYTES: { hex: string; cmd: string }[] = [
 export const PROJECTS: {
   id: string;
   url?: string;
+  repo?: string;
   tags: string[];
   live: boolean;
 }[] = [
@@ -50,6 +51,13 @@ export const PROJECTS: {
     live: true,
   },
   {
+    id: "meirendeu",
+    url: "https://mei-rendeu.com.br",
+    repo: "https://github.com/matheus-qrz/mei-rendeu",
+    tags: ["Next.js", "WhatsApp", "IA", "Stripe", "Workers"],
+    live: true,
+  },
+  {
     id: "servin",
     tags: ["Next.js", "Node.js", "MongoDB", "AWS"],
     live: false,
@@ -57,13 +65,23 @@ export const PROJECTS: {
   {
     id: "tijolo",
     url: "https://valeotijolo.com.br",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
+    tags: ["Next.js", "TypeScript", "Tailwind", "PDF"],
     live: true,
   },
   {
     id: "gateway",
     tags: ["Next.js", "Stripe", "Radar", "Webhooks"],
     live: true,
+  },
+  {
+    id: "livia",
+    tags: ["Next.js 14", "TypeScript", "Tailwind", "Zustand"],
+    live: true,
+  },
+  {
+    id: "freelas",
+    tags: ["Next.js", "TypeScript", "Monorepo"],
+    live: false,
   },
   { id: "lith1um", tags: ["Next.js", "TypeScript", "ERP"], live: false },
   { id: "copa", tags: ["Next.js", "IA", "Stripe"], live: true },
@@ -101,7 +119,8 @@ export interface Content {
     sub: string;
     ctaTalk: string;
     ctaWork: string;
-    shotCaption: string;
+    domainsLabel: string;
+    domains: { sector: string; what: string }[];
     railLabel: string;
     rail: Record<string, string>;
   };
@@ -122,6 +141,8 @@ export interface Content {
   work: {
     eyebrow: string;
     h: string;
+    lede: string;
+    repo: string;
     items: Record<
       string,
       { name: string; host: string; desc: string; state: string }
@@ -133,7 +154,31 @@ export interface Content {
     h: string;
     roles: { when: string; role: string; org: string; desc: string }[];
   };
-  contact: { eyebrow: string; h: string; lede: string };
+  contact: {
+    eyebrow: string;
+    h: string;
+    lede: string;
+    direct: string;
+    form: {
+      title: string;
+      name: string;
+      company: string;
+      companyHint: string;
+      email: string;
+      need: string;
+      needHint: string;
+      submit: string;
+      sending: string;
+      okTitle: string;
+      okBody: string;
+      errTitle: string;
+      errBody: string;
+      privacy: string;
+      required: string;
+      badEmail: string;
+      tooShort: string;
+    };
+  };
   footerMid: string;
 }
 
@@ -144,7 +189,7 @@ const pt: Content = {
     work: "Projetos",
     about: "Sobre",
     path: "Trajetória",
-    contact: "Contato",
+    contact: "Orçamento",
   },
   navLabel: {
     hero: "INÍCIO",
@@ -153,24 +198,51 @@ const pt: Content = {
     work: "PROJETOS",
     about: "SOBRE",
     path: "TRAJETÓRIA",
-    contact: "CONTATO",
+    contact: "ORÇAMENTO",
   },
-  status: "Disponível · remoto",
+  status: "Aceitando projetos",
   hero: {
     meta: [
       "Matheus Oliveira",
-      "Engenheiro de software",
+      "Engenheiro de software autônomo",
       "João Pessoa, PB",
-      "UTC−3",
     ],
-    headline: "Construo os sistemas que os negócios **usam para funcionar**.",
-    sub: "Não as páginas que eles usam para se apresentar. Pedido por QR code na mesa, comanda saindo na impressora térmica da cozinha, cobrança recorrente no Stripe.",
-    ctaTalk: "Falar comigo",
+    headline:
+      "Todo negócio roda sobre uma regra que ninguém escreveu. Meu trabalho é **transformar isso em software**.",
+    sub: "Restaurante, pousada, contabilidade de MEI, imobiliária, checkout de pagamento, site de escritório. Domínios diferentes, mesmo trabalho: entrar na operação, entender como ela realmente funciona e entregar um sistema que aguenta o dia a dia.",
+    ctaTalk: "Pedir um orçamento",
     ctaWork: "Ver os projetos",
-    shotCaption: "Tableflow · KDS — a tela que a cozinha olha durante o serviço",
+    domainsLabel: "Setores em que já entreguei",
+    domains: [
+      {
+        sector: "Restaurante e bar",
+        what: "Pedido por QR na mesa, comanda térmica na cozinha, assinatura mensal",
+      },
+      {
+        sector: "Hotelaria",
+        what: "Serviço de quarto por QR, operação por setor, QR impresso por quarto",
+      },
+      {
+        sector: "Fiscal e MEI",
+        what: "IA no WhatsApp que registra receita, lembra do DAS e avisa do teto",
+      },
+      {
+        sector: "Imobiliário",
+        what: "Comprar ou alugar, ITBI, cenários comparados e relatório em PDF",
+      },
+      {
+        sector: "Pagamentos",
+        what: "Checkout sob medida, antifraude, conversão de moeda, conciliação",
+      },
+      {
+        sector: "Site institucional",
+        what: "Escritório e negócio local: rápido, achável no Google, fácil de atualizar",
+      },
+    ],
     railLabel: "Produtos que eu construí e mantenho",
     rail: {
       tableflow: "restaurantes",
+      meirendeu: "fiscal · MEI",
       servin: "hotelaria",
       tijolo: "imobiliário",
       copa: "geração por IA",
@@ -194,7 +266,7 @@ const pt: Content = {
       {
         layer: "Contratos",
         tool: "TypeScript · Zod",
-        role: "Validação da borda até o banco",
+        role: "Validação da borda até o banco — inclusive no formulário aqui embaixo",
       },
       {
         layer: "Estado",
@@ -220,6 +292,11 @@ const pt: Content = {
         layer: "Dinheiro",
         tool: "Stripe",
         role: "Assinaturas, webhooks, faturas e inadimplência",
+      },
+      {
+        layer: "Mensageria",
+        tool: "WhatsApp · IA",
+        role: "Conversa como interface, quando o cliente não quer mais um app",
       },
       {
         layer: "Hardware",
@@ -252,12 +329,20 @@ const pt: Content = {
   },
   work: {
     eyebrow: "Projetos",
-    h: "Coisas que outras pessoas usam",
+    h: "Nove sistemas, seis setores",
+    lede: "Produtos meus e projetos de cliente. A lista é a resposta para “você já fez algo parecido com o que eu preciso?”.",
+    repo: "código",
     items: {
       tableflow: {
         name: "Tableflow",
         host: "tableflow.software ↗",
         desc: "SaaS de gestão para restaurantes. Pedido por QR code na mesa, delivery e balcão, impressão térmica na cozinha, relatórios e cobrança recorrente.",
+        state: "Em produção",
+      },
+      meirendeu: {
+        name: "MEI Rendeu",
+        host: "mei-rendeu.com.br ↗",
+        desc: "Assistente financeiro para microempreendedores que vive dentro do WhatsApp. A IA registra receita e despesa por mensagem de texto, categoriza sozinha, lembra do DAS e avisa quando o faturamento se aproxima do teto de R$ 81 mil. Sem app, sem planilha.",
         state: "Em produção",
       },
       servin: {
@@ -269,14 +354,26 @@ const pt: Content = {
       tijolo: {
         name: "Vale o Tijolo?",
         host: "valeotijolo.com.br ↗",
-        desc: "Calculadora para quem está decidindo entre comprar e alugar no Brasil. Ferramenta paga, estática, sem backend — carrega instantâneo e não tem o que quebrar.",
+        desc: "Calculadora para quem está decidindo entre comprar e alugar no Brasil. Compara cenários, considera ITBI e gera relatório em PDF. Ferramenta paga, estática, sem backend.",
         state: "Em produção",
       },
       gateway: {
         name: "Gateway de pagamentos personalizados",
         host: "checkout sob medida",
-        desc: "Checkout próprio em Next.js sobre Stripe, com sinais de antifraude do Radar, conversão de moeda e conciliação. Dinheiro de verdade passando, então zero improviso.",
+        desc: "Checkout próprio em Next.js sobre Stripe, com sinais de antifraude do Radar, conversão de moeda e conciliação. Dinheiro de verdade passando, então nada de improviso.",
         state: "Em produção",
+      },
+      livia: {
+        name: "Lívia Lacerda Advocacia",
+        host: "site institucional",
+        desc: "Landing page para escritório de advocacia: serviços, depoimentos, blog, FAQ e contato. Tipografia em Cormorant Garamond e Jost, paleta em marrom e dourado definida a partir da identidade da cliente.",
+        state: "Entregue",
+      },
+      freelas: {
+        name: "Freelas",
+        host: "ferramentas para autônomos",
+        desc: "Monorepo de ferramentas para freelancers brasileiros: calculadora de precificação por hora, gerador de contrato e utilitários de rotina.",
+        state: "Em desenvolvimento",
       },
       lith1um: {
         name: "LITH1UM",
@@ -296,8 +393,9 @@ const pt: Content = {
     eyebrow: "Sobre",
     caption: "João Pessoa · PB · UTC−3",
     paras: [
-      "Sou **engenheiro frontend na Wisecare**, uma plataforma de telessaúde, onde trabalho no produto principal com React 19, Next.js e um design system interno. Fora do expediente, toco meus próprios SaaS e alguns projetos de cliente — arquitetura, deploy, cobrança e suporte, tudo meu.",
-      "Isso significa que eu já fui acordado por webhook do Stripe falhando às duas da manhã, já reescrevi fila de impressão porque o restaurante perdeu pedido no sábado à noite, e já expliquei para dono de pousada por que o sistema estava certo e o processo dele não. **Eu não entrego o código e sumo** — eu fico com a operação.",
+      "Sou **engenheiro de software autônomo**. Toco meus próprios SaaS e projetos de cliente do primeiro commit ao faturamento — arquitetura, deploy, cobrança e suporte, tudo meu. Em paralelo trabalho como desenvolvedor frontend júnior na Wisecare, uma plataforma de telessaúde, no produto principal em React 19 e Next.js sobre um design system interno.",
+      "Isso significa que eu já fui acordado por webhook do Stripe falhando às duas da manhã, já reescrevi fila de impressão porque um restaurante perdeu pedido num sábado à noite, e já expliquei para dono de pousada por que o sistema estava certo e o processo dele não. **Eu não entrego o código e sumo** — eu fico com a operação.",
+      "O que eu faço de melhor não é escrever código: é **entender um negócio que não é meu**. Cada setor tem uma regra que ninguém documentou — a taxa de serviço que muda no fim de semana, o teto do MEI que ninguém acompanha, o ITBI que entra na conta do financiamento. Achar essa regra e modelar direito é metade do trabalho.",
       "Uso **Claude Code** todo dia, com uma regra: especificação escrita antes, PR revisado linha por linha depois. Modelo é acelerador, não é dono da decisão.",
     ],
   },
@@ -306,16 +404,16 @@ const pt: Content = {
     h: "Cinco anos entregando",
     roles: [
       {
-        when: "2021 → hoje",
-        role: "Desenvolvedor frontend",
-        org: "Wisecare",
-        desc: "Frontend do produto principal de telessaúde em React 19 e Next.js, sobre um design system interno. Trabalho diário com design e backend em várias linhas de produto.",
-      },
-      {
         when: "2023 → hoje",
-        role: "Fundador e desenvolvedor",
+        role: "Engenheiro de software autônomo",
         org: "Independente",
         desc: "SaaS próprios e projetos de cliente, do primeiro commit ao faturamento. Frontend, backend, infraestrutura, pagamento e a conversa difícil com o cliente.",
+      },
+      {
+        when: "2021 → hoje",
+        role: "Desenvolvedor frontend júnior",
+        org: "Wisecare",
+        desc: "Produto principal de telessaúde em React 19 e Next.js, sobre um design system interno. Trabalho diário com design e backend em várias linhas de produto.",
       },
       {
         when: "2021 → 2024",
@@ -326,9 +424,33 @@ const pt: Content = {
     ],
   },
   contact: {
-    eyebrow: "Contato",
-    h: "Se você tem uma operação que precisa de software, e não um site que precisa de enfeite — me chama.",
-    lede: "Aberto a vagas remotas e a um número pequeno de projetos por vez. Respondo em até um dia útil.",
+    eyebrow: "Orçamento",
+    h: "Me conta o que você precisa. Eu volto com um orçamento.",
+    lede: "Sistema sob medida, produto novo do zero ou site que precisa existir direito. Respondo em até um dia útil, e a primeira conversa não custa nada.",
+    direct: "Ou fale direto",
+    form: {
+      title: "Pedido de orçamento",
+      name: "Seu nome",
+      company: "Empresa",
+      companyHint: "opcional",
+      email: "E-mail",
+      need: "O que você precisa",
+      needHint:
+        "Conte o problema, não a solução. Que trabalho é feito na mão hoje? O que quebra com mais frequência? Quanto mais concreto, mais útil o orçamento.",
+      submit: "Pedir orçamento",
+      sending: "Enviando…",
+      okTitle: "Recebido.",
+      okBody:
+        "Sua mensagem chegou. Eu respondo em até um dia útil, no e-mail que você informou.",
+      errTitle: "Não consegui enviar.",
+      errBody:
+        "Alguma coisa falhou no caminho. Tente de novo em instantes, ou escreva direto para mthsqrz97@gmail.com.",
+      privacy:
+        "Uso esses dados só para responder você. Não entram em lista, não vão para terceiros.",
+      required: "Campo obrigatório",
+      badEmail: "E-mail inválido",
+      tooShort: "Conte um pouco mais — pelo menos 20 caracteres",
+    },
   },
   footerMid: "Next.js · GSAP · Lenis",
 };
@@ -340,7 +462,7 @@ const en: Content = {
     work: "Work",
     about: "About",
     path: "Track record",
-    contact: "Contact",
+    contact: "Get a quote",
   },
   navLabel: {
     hero: "INDEX",
@@ -349,24 +471,51 @@ const en: Content = {
     work: "WORK",
     about: "ABOUT",
     path: "PATH",
-    contact: "CONTACT",
+    contact: "QUOTE",
   },
-  status: "Available · remote",
+  status: "Taking on projects",
   hero: {
     meta: [
       "Matheus Oliveira",
-      "Software engineer",
+      "Independent software engineer",
       "João Pessoa, Brazil",
-      "UTC−3",
     ],
-    headline: "I build the systems businesses **actually run on**.",
-    sub: "Not the pages they introduce themselves with. Orders placed by QR code at the table, tickets printing on the kitchen's thermal printer, recurring billing on Stripe.",
-    ctaTalk: "Get in touch",
+    headline:
+      "Every business runs on a rule nobody wrote down. I **turn it into software**.",
+    sub: "Restaurants, guesthouses, sole-trader bookkeeping, real estate, payment checkout, law firm sites. Different domains, same job: get inside the operation, work out how it actually runs, and ship a system that survives daily use.",
+    ctaTalk: "Get a quote",
     ctaWork: "See the work",
-    shotCaption: "Tableflow · KDS — the screen the kitchen watches through service",
+    domainsLabel: "Sectors I have shipped in",
+    domains: [
+      {
+        sector: "Restaurants & bars",
+        what: "QR ordering at the table, thermal tickets in the kitchen, monthly billing",
+      },
+      {
+        sector: "Hospitality",
+        what: "Room service by QR, operations split by department, printed room codes",
+      },
+      {
+        sector: "Tax & sole traders",
+        what: "WhatsApp AI that logs revenue, chases tax dates and watches the ceiling",
+      },
+      {
+        sector: "Real estate",
+        what: "Buy or rent, transfer tax, side-by-side scenarios and a PDF report",
+      },
+      {
+        sector: "Payments",
+        what: "Bespoke checkout, fraud signals, currency conversion, reconciliation",
+      },
+      {
+        sector: "Marketing sites",
+        what: "Firms and local businesses: fast, findable on Google, simple to update",
+      },
+    ],
     railLabel: "Products I built and maintain",
     rail: {
       tableflow: "restaurants",
+      meirendeu: "tax · sole traders",
       servin: "hospitality",
       tijolo: "real estate",
       copa: "AI generation",
@@ -390,7 +539,7 @@ const en: Content = {
       {
         layer: "Contracts",
         tool: "TypeScript · Zod",
-        role: "Validation from the edge down to the database",
+        role: "Validation from the edge down — including the form below",
       },
       {
         layer: "State",
@@ -416,6 +565,11 @@ const en: Content = {
         layer: "Money",
         tool: "Stripe",
         role: "Subscriptions, webhooks, invoices and dunning",
+      },
+      {
+        layer: "Messaging",
+        tool: "WhatsApp · AI",
+        role: "Conversation as the interface, when nobody wants another app",
       },
       {
         layer: "Hardware",
@@ -448,12 +602,20 @@ const en: Content = {
   },
   work: {
     eyebrow: "Work",
-    h: "Things other people use",
+    h: "Nine systems, six sectors",
+    lede: "My own products and client projects. The list is the answer to “have you built anything like what I need?”.",
+    repo: "code",
     items: {
       tableflow: {
         name: "Tableflow",
         host: "tableflow.software ↗",
         desc: "Restaurant management SaaS. QR code ordering at the table, delivery and counter, thermal printing in the kitchen, reporting and recurring billing.",
+        state: "In production",
+      },
+      meirendeu: {
+        name: "MEI Rendeu",
+        host: "mei-rendeu.com.br ↗",
+        desc: "A financial assistant for Brazilian sole traders that lives inside WhatsApp. The AI logs income and expenses from plain text messages, categorises them, chases the monthly tax deadline and warns when revenue approaches the legal ceiling. No app, no spreadsheet.",
         state: "In production",
       },
       servin: {
@@ -465,7 +627,7 @@ const en: Content = {
       tijolo: {
         name: "Vale o Tijolo?",
         host: "valeotijolo.com.br ↗",
-        desc: "A calculator for Brazilians deciding between buying and renting. Paid tool, fully static, no backend — loads instantly and has nothing to break.",
+        desc: "A calculator for Brazilians deciding between buying and renting. Compares scenarios, factors in transfer tax and generates a PDF report. Paid tool, fully static, no backend.",
         state: "In production",
       },
       gateway: {
@@ -473,6 +635,18 @@ const en: Content = {
         host: "bespoke checkout",
         desc: "A custom Next.js checkout on top of Stripe, with Radar fraud signals, currency conversion and reconciliation. Real money moving, so nothing improvised.",
         state: "In production",
+      },
+      livia: {
+        name: "Lívia Lacerda Advocacia",
+        host: "marketing site",
+        desc: "Landing page for a law firm: services, testimonials, blog, FAQ and contact. Cormorant Garamond and Jost, with a brown and gold palette drawn from the client's own identity.",
+        state: "Delivered",
+      },
+      freelas: {
+        name: "Freelas",
+        host: "tools for freelancers",
+        desc: "A monorepo of tools for Brazilian freelancers: hourly pricing calculator, contract generator and everyday utilities.",
+        state: "In development",
       },
       lith1um: {
         name: "LITH1UM",
@@ -490,10 +664,11 @@ const en: Content = {
   },
   about: {
     eyebrow: "About",
-    caption: "João Pessoa · PB · UTC−3",
+    caption: "João Pessoa · Brazil · UTC−3",
     paras: [
-      "I'm a **frontend engineer at Wisecare**, a telehealth platform, where I work on the core product with React 19, Next.js and an internal design system. Outside those hours I run my own SaaS and a few client projects — architecture, deploys, billing and support, all mine.",
+      "I'm an **independent software engineer**. I run my own SaaS products and client projects from first commit to revenue — architecture, deploys, billing and support, all mine. Alongside that I work as a junior frontend developer at Wisecare, a telehealth platform, on the core product in React 19 and Next.js over an internal design system.",
       "Which means I've been woken up by a failing Stripe webhook at two in the morning, rewritten a print queue because a restaurant lost an order on a Saturday night, and explained to a guesthouse owner why the system was right and his process wasn't. **I don't hand over the code and disappear** — I stay with the operation.",
+      "What I'm best at isn't writing code: it's **understanding a business that isn't mine**. Every sector has a rule nobody wrote down — the service charge that changes at weekends, the tax ceiling nobody tracks, the transfer tax that belongs in the mortgage maths. Finding that rule and modelling it properly is half the job.",
       "I use **Claude Code** every day, with one rule: spec written first, PR reviewed line by line after. The model is an accelerator, not the one making the call.",
     ],
   },
@@ -502,16 +677,16 @@ const en: Content = {
     h: "Five years shipping",
     roles: [
       {
-        when: "2021 → now",
-        role: "Frontend developer",
-        org: "Wisecare",
-        desc: "Frontend of the core telehealth product in React 19 and Next.js, on an internal design system. Daily work with design and backend across several product lines.",
+        when: "2023 → now",
+        role: "Independent software engineer",
+        org: "Self-employed",
+        desc: "Own SaaS products and client projects, from first commit to revenue. Frontend, backend, infrastructure, payments and the hard conversation with the client.",
       },
       {
-        when: "2023 → now",
-        role: "Founder and developer",
-        org: "Independent",
-        desc: "Own SaaS products and client projects, from first commit to revenue. Frontend, backend, infrastructure, payments and the hard conversation with the client.",
+        when: "2021 → now",
+        role: "Junior frontend developer",
+        org: "Wisecare",
+        desc: "Core telehealth product in React 19 and Next.js, on an internal design system. Daily work with design and backend across several product lines.",
       },
       {
         when: "2021 → 2024",
@@ -522,9 +697,33 @@ const en: Content = {
     ],
   },
   contact: {
-    eyebrow: "Contact",
-    h: "If you have an operation that needs software, not a site that needs decoration — get in touch.",
-    lede: "Open to remote roles and to a small number of projects at a time. I reply within one business day.",
+    eyebrow: "Get a quote",
+    h: "Tell me what you need. I'll come back with a quote.",
+    lede: "A bespoke system, a new product from scratch, or a site that needs to exist properly. I reply within one business day, and the first conversation costs nothing.",
+    direct: "Or reach me directly",
+    form: {
+      title: "Quote request",
+      name: "Your name",
+      company: "Company",
+      companyHint: "optional",
+      email: "Email",
+      need: "What you need",
+      needHint:
+        "Describe the problem, not the solution. What is done by hand today? What breaks most often? The more concrete, the more useful the quote.",
+      submit: "Request a quote",
+      sending: "Sending…",
+      okTitle: "Got it.",
+      okBody:
+        "Your message arrived. I'll reply within one business day, to the address you gave.",
+      errTitle: "That didn't send.",
+      errBody:
+        "Something failed on the way. Try again in a moment, or write straight to mthsqrz97@gmail.com.",
+      privacy:
+        "I use these details only to reply to you. No lists, no third parties.",
+      required: "Required field",
+      badEmail: "Invalid email",
+      tooShort: "Tell me a bit more — at least 20 characters",
+    },
   },
   footerMid: "Next.js · GSAP · Lenis",
 };
