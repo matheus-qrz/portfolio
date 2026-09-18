@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import { LINKS, sectionIndex } from "@/lib/content";
+import { LINKS } from "@/lib/content";
 import { fieldErrors, type FieldName } from "@/lib/quote";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
@@ -26,7 +26,7 @@ type Status = "idle" | "sending" | "ok" | "error";
 export default function Contact() {
   const root = useRef<HTMLElement>(null);
   const { t } = useI18n();
-  const f = t.contact.form;
+  const f = t.quote.form;
 
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -73,21 +73,16 @@ export default function Contact() {
   const busy = status === "sending";
 
   return (
-    <section id="contact" className={`sec ${styles.contact}`} ref={root}>
+    <section id="orcamento" className={`sec ${styles.contact}`} ref={root}>
       <div className="shell">
         <div className="secHead">
-          <div className="top">
-            <p className="eyebrow">{t.contact.eyebrow}</p>
-            <span className="idx">{sectionIndex("contact")}</span>
-          </div>
-          <h2 className="h2">{t.contact.h}</h2>
-          <p className="lede">{t.contact.lede}</p>
+          <p className="eyebrow">{t.quote.eyebrow}</p>
+          <h2 className="d2">{t.quote.h}</h2>
+          <p className="lede">{t.quote.lede}</p>
         </div>
 
         <div className={styles.grid}>
           <div className={styles.card}>
-            <p className={styles.cardTitle}>{f.title}</p>
-
             {status === "ok" ? (
               <div className={styles.result} role="status">
                 <p className={styles.resultTitle}>{f.okTitle}</p>
@@ -116,7 +111,7 @@ export default function Contact() {
 
                 <div className={styles.row}>
                   <label className={styles.label} htmlFor="q-company">
-                    {f.company} <span className={styles.hint}>{f.companyHint}</span>
+                    {f.company} <span className={styles.hint}>{f.optional}</span>
                   </label>
                   <input
                     className={styles.input}
@@ -197,7 +192,7 @@ export default function Contact() {
           </div>
 
           <div className={styles.side}>
-            <p className={styles.sideLabel}>{t.contact.direct}</p>
+            <p className={styles.sideLabel}>{t.quote.direct}</p>
             <div className={styles.links}>
               <a className={styles.cta} href={`mailto:${LINKS.email}`}>
                 {LINKS.email}

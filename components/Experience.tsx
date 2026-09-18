@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { sectionIndex } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
 import styles from "./Experience.module.css";
@@ -19,15 +18,11 @@ export default function Experience() {
     <section id="path" className="sec" ref={root}>
       <div className="shell">
         <div className="secHead">
-          <div className="top">
-            <p className="eyebrow">{t.path.eyebrow}</p>
-            <span className="idx">{sectionIndex("path")}</span>
-          </div>
-          <h2 className="h2">{t.path.h}</h2>
+          <p className="eyebrow">{t.about.pathLabel}</p>
         </div>
 
         <div className={styles.list}>
-          {t.path.roles.map((role) => (
+          {t.about.roles.map((role) => (
             <div className={styles.row} key={`${role.org}-${role.when}`}>
               <span className={styles.when}>{role.when}</span>
               <div>
