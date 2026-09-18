@@ -27,15 +27,26 @@ const I18nContext = createContext<I18n>({
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>("pt");
 
-  // Lê a preferência salva só depois da hidratação, para servidor e cliente
-  // renderizarem o mesmo HTML no primeiro passo.
+  /**
+   * Preferência salva vence; sem ela, o idioma do navegador decide.
+   * Tudo isso só depois da hidratação: o primeiro render continua em `pt`
+   * nos dois lados, senão servidor e cliente divergem.
+   */
   useEffect(() => {
+    let saved: string | null = null;
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === "en" || saved === "pt") setLocale(saved);
+      saved = localStorage.getItem(STORAGE_KEY);
     } catch {
-      /* localStorage indisponível — segue em pt */
+      /* localStorage indisponível — cai no navegador */
     }
+
+    if (saved === "en" || saved === "pt") {
+      setLocale(saved);
+      return;
+    }
+
+    const nav = navigator.language ?? "";
+    setLocale(nav.toLowerCase().startsWith("pt") ? "pt" : "en");
   }, []);
 
   useEffect(() => {

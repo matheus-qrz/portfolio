@@ -1,0 +1,44 @@
+.fab {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 999px;
+  background: #1f8f4d;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-variation-settings: "wdth" 96, "wght" 650;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.fab:hover {
+  background: #24a75b;
+  transform: translateY(-2px);
+}
+
+.fab svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  fill: currentColor;
+}
+
+/* No desktop o ícone vem com rótulo; no celular o rótulo sairia por cima
+   do conteúdo, então fica só o ícone. */
+.label {
+  padding-inline-end: 6px;
+}
+
+@media (max-width: 720px) {
+  .label {
+    display: none;
+  }
+}

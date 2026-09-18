@@ -92,16 +92,9 @@ export const PROJECTS: Project[] = [
     live: false,
   },
   { id: "lith1um", tags: ["Next.js", "TypeScript", "ERP"], live: false },
-  { id: "copa", tags: ["Next.js", "IA", "Stripe"], live: true },
 ];
 
-const OWN_PRODUCTS = new Set([
-  "tableflow",
-  "meirendeu",
-  "servin",
-  "tijolo",
-  "copa",
-]);
+const OWN_PRODUCTS = new Set(["tableflow", "meirendeu", "servin", "tijolo"]);
 
 /**
  * Os cinco produtos próprios, na ordem em que aparecem em PROJECTS.
@@ -158,6 +151,11 @@ export const LINKS = {
 export interface Content {
   nav: Record<Exclude<SectionId, "hero">, string>;
   navLabel: Record<SectionId, string>;
+  /** Os quatro itens do menu novo. Independente de SECTIONS. */
+  menu: { sites: string; software: string; work: string; about: string };
+  /** Botão sempre visível no header. */
+  quoteCta: string;
+  whatsapp: { label: string; aria: string; message: string };
   status: string;
   hero: {
     meta: string[];
@@ -257,6 +255,19 @@ const pt: Content = {
     print: "COMANDA",
     about: "SOBRE",
     path: "TRAJETÓRIA",
+  },
+  menu: {
+    sites: "Sites",
+    software: "Sistemas",
+    work: "Trabalho",
+    about: "Sobre",
+  },
+  quoteCta: "Pedir orçamento",
+  whatsapp: {
+    label: "WhatsApp",
+    aria: "Falar no WhatsApp",
+    message:
+      "Oi, Matheus! Vim pelo seu site e queria falar sobre um projeto.",
   },
   status: "Aceitando projetos",
   hero: {
@@ -495,6 +506,18 @@ const en: Content = {
     print: "PRINT",
     about: "ABOUT",
     path: "PATH",
+  },
+  menu: {
+    sites: "Websites",
+    software: "Software",
+    work: "Work",
+    about: "About",
+  },
+  quoteCta: "Get a quote",
+  whatsapp: {
+    label: "WhatsApp",
+    aria: "Message me on WhatsApp",
+    message: "Hi Matheus! I found your site and I'd like to talk about a project.",
   },
   status: "Taking on projects",
   hero: {

@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Archivo, IBM_Plex_Mono, Martian_Mono, Inter } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
+/**
+ * Uma família só, com o eixo de largura carregado: a display larga
+ * (wdth 118–125) e a linha de contraste estreita (wdth 64) são a mesma
+ * fonte em duas instâncias, não duas famílias.
+ *
+ * `--font-sans` sai daqui via `--font-archivo`, resolvido em globals.css
+ * com o fallback dentro do var(). Componentes do shadcn que dependem de
+ * `--font-sans` passam a usar a Archivo sem mudança nenhuma.
+ */
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
@@ -12,28 +18,15 @@ const archivo = Archivo({
   display: "swap",
 });
 
-const martian = Martian_Mono({
-  subsets: ["latin"],
-  variable: "--font-martian",
-  display: "swap",
-});
-
-const plex = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://matheusoliveira.dev"),
   title: "Matheus Oliveira — Engenheiro de software",
   description:
-    "Construo os sistemas que os negócios usam para funcionar: pedido por QR code, impressão térmica ESC/POS, cobrança recorrente e os painéis que sustentam a operação.",
+    "Sites rápidos para negócios e sistemas sob medida. Engenheiro de software em João Pessoa.",
   openGraph: {
     title: "Matheus Oliveira — Engenheiro de software",
     description:
-      "SaaS de gestão para restaurantes e hotelaria, checkout sob medida e ferramentas web. React 19, Next.js 15, Node e AWS.",
+      "Sites rápidos para negócios e sistemas sob medida. Engenheiro de software em João Pessoa.",
     locale: "pt_BR",
     type: "website",
   },
@@ -45,14 +38,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="pt-BR"
-      className={cn(archivo.variable, martian.variable, plex.variable, "font-sans", inter.variable)}
-    >
-      <body>
-        <div className="grain" aria-hidden="true" />
-        {children}
-      </body>
+    <html lang="pt-BR" className={archivo.variable}>
+      <body>{children}</body>
     </html>
   );
 }

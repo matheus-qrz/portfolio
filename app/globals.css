@@ -2,73 +2,75 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 /* ─────────────────────────────────────────────────────────────────────
-   Tokens
-   Ground é grafite quente com viés vermelho — não preto neutro.
-   `paper` e `red` vêm do papel térmico de duas cores: o material que
-   aparece no demo da comanda e na seção de contato.
+   Tokens da marca
+
+   O site é sempre escuro. Não existe tema claro e nada aqui reage a
+   `prefers-color-scheme`: a queda pelo céu noturno só funciona sobre a
+   noite, e um tema claro automático arruinaria a cena inteira.
+
+   Contraste medido sobre --noite: papel 16:1, brasa 6,6:1, nevoa 4,8:1.
+   --brasa-esc existe para o acento sobre fundo claro (5,2:1), onde a
+   brasa normal não passa.
    ──────────────────────────────────────────────────────────────────── */
 :root {
-  --ink: #13100e;
-  --ink-2: #1b1714;
-  --ink-3: #241e1a;
-  --line: #332b25;
-  --line-2: #463b33;
+  --noite: #090c14;
+  --papel: #efe9dd;
+  --brasa: #f0703f;
+  --brasa-esc: #a63d22;
+  --ceu: #16264a;
+  --nevoa: #9a958c;
+  --grafite: #625e58;
 
-  --paper: #efe9dd;
-  --paper-2: #dcd3c2;
+  /* Fios e superfícies derivam do papel para acompanhar qualquer ajuste
+     de fundo sem virar uma segunda paleta para manter. */
+  --fio: rgba(239, 233, 221, 0.13);
+  --fio-forte: rgba(239, 233, 221, 0.26);
+  --brasa-fraca: rgba(240, 112, 63, 0.14);
 
-  --bone: #ded7cb;
-  --dim-hi: #aba095; /* texto secundário que ainda precisa ser lido */
-  --dim: #8c8278;
-  --dimmer: #5e564f;
-
-  --red: #e2472c;
-  --red-soft: rgba(226, 71, 44, 0.14);
-
-  /* O fallback vai DENTRO do var(): sem ele, uma variável ausente invalida
-     a declaração font-family inteira e o resto da pilha nunca é usado. */
-  --f-display: var(--font-archivo, "Helvetica Neue"), Arial, sans-serif;
-  --f-label: var(--font-martian, ui-monospace), monospace;
-  --f-mono: var(--font-plex, ui-monospace), "SF Mono", Menlo, monospace;
+  /* Uma família só, com eixo de largura. O fallback vai DENTRO do var():
+     sem ele, uma variável ausente invalida a declaração font-family
+     inteira e o resto da pilha nunca chega a ser usado. */
+  --f-sans: var(--font-archivo, "Helvetica Neue"), Arial, sans-serif;
+  --font-sans: var(--f-sans);
 
   --gut: clamp(20px, 5vw, 72px);
-  --rail: 44px;
-  --maxw: 1320px;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --maxw: 1280px;
+
+  /* Tokens do shadcn apontando para a paleta da noite. Definidos uma vez
+     só, em valores escuros: não há variante clara para alternar. */
+  --background: #090c14;
+  --foreground: #efe9dd;
+  --card: #0e131f;
+  --card-foreground: #efe9dd;
+  --popover: #0e131f;
+  --popover-foreground: #efe9dd;
+  --primary: #f0703f;
+  --primary-foreground: #090c14;
+  --secondary: #16264a;
+  --secondary-foreground: #efe9dd;
+  --muted: #16264a;
+  --muted-foreground: #9a958c;
+  --accent: #16264a;
+  --accent-foreground: #efe9dd;
+  --destructive: #f0703f;
+  --border: rgba(239, 233, 221, 0.13);
+  --input: rgba(239, 233, 221, 0.26);
+  --ring: #f0703f;
+  --radius: 0.5rem;
+  --sidebar: #0e131f;
+  --sidebar-foreground: #efe9dd;
+  --sidebar-primary: #f0703f;
+  --sidebar-primary-foreground: #090c14;
+  --sidebar-accent: #16264a;
+  --sidebar-accent-foreground: #efe9dd;
+  --sidebar-border: rgba(239, 233, 221, 0.13);
+  --sidebar-ring: #f0703f;
+  --chart-1: #f0703f;
+  --chart-2: #efe9dd;
+  --chart-3: #9a958c;
+  --chart-4: #16264a;
+  --chart-5: #a63d22;
 }
 
 *,
@@ -79,13 +81,15 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+  background: var(--noite);
 }
 
 body {
   margin: 0;
-  background: var(--ink);
-  color: var(--bone);
-  font-family: var(--f-display);
+  background: var(--noite);
+  color: var(--papel);
+  font-family: var(--f-sans);
   font-variation-settings: "wdth" 100;
   font-size: 16px;
   line-height: 1.6;
@@ -103,35 +107,58 @@ a {
 }
 
 ::selection {
-  background: var(--red);
-  color: var(--paper);
+  background: var(--brasa);
+  color: var(--noite);
 }
 
 :focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--brasa);
   outline-offset: 3px;
 }
 
-/* ── primitivas compartilhadas ─────────────────────────────────────── */
-.shell {
-  padding-inline: var(--gut);
-  max-width: var(--maxw);
-  margin-inline: auto;
-  width: 100%;
+/* ── tipografia ────────────────────────────────────────────────────────
+   Três registros e nada além: display larga, linha de contraste estreita
+   e texto em largura normal. A brasa marca uma coisa por tela — um botão,
+   um preço ou uma palavra — e nunca aparece como decoração solta.
+   ──────────────────────────────────────────────────────────────────── */
+.d1 {
+  font-variation-settings: "wdth" 122, "wght" 840;
+  font-size: clamp(38px, 8.2vw, 104px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  margin: 0;
+  text-wrap: balance;
 }
 
-.sec {
-  position: relative;
-  padding-block: clamp(56px, 9vh, 104px);
+.d2 {
+  font-variation-settings: "wdth" 118, "wght" 800;
+  font-size: clamp(29px, 4.8vw, 60px);
+  line-height: 0.98;
+  letter-spacing: -0.028em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.d3 {
+  font-variation-settings: "wdth" 114, "wght" 800;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* A linha de contraste: estreita e leve, o oposto exato da display. */
+.fina {
+  font-variation-settings: "wdth" 64, "wght" 300;
+  letter-spacing: 0.01em;
 }
 
 .eyebrow {
-  font-family: var(--f-label);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-variation-settings: "wdth" 88, "wght" 600;
+  font-size: 11px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--dim);
+  color: var(--nevoa);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -142,31 +169,13 @@ a {
   content: "";
   width: 22px;
   height: 1px;
-  background: var(--red);
+  background: var(--brasa);
   flex: none;
 }
 
-.idx {
-  font-family: var(--f-label);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: var(--dimmer);
-}
-
-.h2 {
-  font-family: var(--f-display);
-  font-weight: 800;
-  font-variation-settings: "wdth" 112, "wght" 800;
-  font-size: clamp(30px, 4.6vw, 58px);
-  line-height: 0.98;
-  letter-spacing: -0.025em;
-  margin: 0;
-  text-wrap: balance;
-}
-
 .lede {
-  color: var(--dim);
-  font-size: clamp(15px, 1.15vw, 17px);
+  color: var(--nevoa);
+  font-size: clamp(15px, 1.15vw, 18px);
   line-height: 1.7;
   max-width: 62ch;
   margin: 0;
@@ -176,75 +185,81 @@ a {
   font-variant-numeric: tabular-nums;
 }
 
+/* ── primitivas de layout ──────────────────────────────────────────── */
+.shell {
+  padding-inline: var(--gut);
+  max-width: var(--maxw);
+  margin-inline: auto;
+  width: 100%;
+}
+
+.sec {
+  position: relative;
+  padding-block: clamp(64px, 11vh, 132px);
+}
+
 .secHead {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: clamp(28px, 5vh, 48px);
+  gap: 16px;
+  margin-bottom: clamp(30px, 5vh, 52px);
 }
 
-.secHead .top {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.rule {
+/* Nenhuma seção usa card fechado: o que separa uma coluna da outra é um
+   fio, não uma borda de caixa. */
+.fio {
   height: 1px;
-  background: var(--line);
-  position: relative;
+  background: var(--fio);
+  border: 0;
+  margin: 0;
 }
 
-.rule::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: -3px;
-  width: 52px;
-  height: 7px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--line-2) 0 1px,
-    transparent 1px 13px
-  );
+/* ── botões ───────────────────────────────────────────────────────────
+   Dois pesos só. O sólido é a brasa e aparece uma vez por tela; o
+   contornado é tudo o mais.
+   ──────────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--fio-forte);
+  background: transparent;
+  color: var(--papel);
+  font: inherit;
+  font-size: 14.5px;
+  font-variation-settings: "wdth" 96, "wght" 650;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.chip {
-  font-family: var(--f-mono);
-  font-size: 10.5px;
-  color: var(--dim);
-  border: 1px solid var(--line-2);
-  border-radius: 2px;
-  padding: 3px 7px;
-  white-space: nowrap;
+.btn:hover {
+  border-color: var(--papel);
+  background: rgba(239, 233, 221, 0.06);
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.btn-brasa {
+  background: var(--brasa);
+  border-color: var(--brasa);
+  color: var(--noite);
 }
 
-/* grão de filme por cima de tudo */
-.grain {
-  position: fixed;
-  inset: -50%;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.btn-brasa:hover {
+  background: #ff8154;
+  border-color: #ff8154;
+  color: var(--noite);
 }
 
-main {
-  padding-inline: var(--rail);
-}
-
-@media (max-width: 1000px) {
-  main {
-    padding-inline: 0;
-  }
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -301,40 +316,6 @@ main {
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
