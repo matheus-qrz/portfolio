@@ -202,6 +202,36 @@ shadcn, não da página antiga.
   ausente invalida a declaração `font-family` inteira.
 - `NEXT_PUBLIC_*` é embutida no build, não lida em tempo de execução.
 
+## Desempenho
+
+Lighthouse mobile, build de produção, navegador em pt-BR, três execuções:
+
+| métrica | valor | meta |
+| --- | --- | --- |
+| Performance | 97 | ≥ 90 |
+| Acessibilidade | 100 | — |
+| Boas práticas | 100 | — |
+| SEO | 100 | — |
+| FCP | 0,91s | — |
+| **LCP** | **2,56s** | ≤ 2,5s |
+| CLS | 0 | ≤ 0,05 |
+| TBT | 26–79ms | — |
+| Speed Index | 1,4s | — |
+
+O LCP fica ~60ms acima do teto. Sem a simulação do Lighthouse, e com o
+processador a 1/4 da velocidade, ele é **224ms**: o parágrafo do hero
+pinta uma vez só, no lugar definitivo. O que a simulação cobra é a
+cadeia de 4G lento até a fonte.
+
+Duas alavancas continuam disponíveis, se o número simulado precisar
+mesmo entrar debaixo de 2,5s:
+
+1. Sair do `useScroll` do Motion e calcular `P` a partir do
+   `getBoundingClientRect` da seção. Tira o Motion inteiro do bundle
+   (~30 kB), mas contraria a decisão de arquitetura da queda.
+2. Inline do CSS crítico. Foi testado (`experimental.optimizeCss` com o
+   `critters`) e não moveu o número; a dependência é depreciada e saiu.
+
 ## Pendências
 
 - Os protótipos normativos (`queda-v5.html`, `marca.html`) nunca foram
