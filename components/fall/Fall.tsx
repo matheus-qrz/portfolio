@@ -1,15 +1,46 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { animate, stagger, useScroll } from "framer-motion";
 import { FALL, FALL_HERO, type FallParams } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useKindLink } from "@/lib/quoteKind";
 import { registerAnchor } from "@/components/SmoothScroll";
-import { FallContext, type FallRegistry } from "./FallContext";
+import { FallContext, type FallLayer, type FallRegistry } from "./FallContext";
 import FallItem from "./FallItem";
 import { clamp, skyAt } from "./sky";
 import styles from "./Fall.module.css";
+
+/**
+ * Nem o canvas nem a atmosfera entram no HTML servido e nenhum dos dois
+ * é necessário para ler a página: são a cena, não o conteúdo. Por isso
+ * chegam depois do `load`, num momento ocioso, e entram por opacidade.
+ */
+const Atmosphere = dynamic(() => import("./Atmosphere"), { ssr: false });
+const Starfield = dynamic(() => import("./Starfield"), { ssr: false });
+
+type IdleHandle = number;
+
+function whenIdle(run: () => void): () => void {
+  let idle: IdleHandle | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  const schedule = () => {
+    const ric = window.requestIdleCallback;
+    if (ric) idle = ric(run, { timeout: 2000 });
+    else timer = setTimeout(run, 250);
+  };
+
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
+
+  return () => {
+    window.removeEventListener("load", schedule);
+    if (idle !== undefined) window.cancelIdleCallback?.(idle);
+    if (timer !== undefined) clearTimeout(timer);
+  };
+}
 
 interface Entry {
   params: FallParams;
@@ -23,6 +54,7 @@ export default function Fall() {
   const scene = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const items = useRef(new Map<HTMLElement, Entry>());
+  const layers = useRef(new Set<FallLayer>());
 
   /**
    * `live` só liga depois da montagem, e nunca com movimento reduzido.
@@ -48,15 +80,30 @@ export default function Fall() {
           el.style.visibility = "";
         };
       },
+      registerLayer(draw) {
+        layers.current.add(draw);
+        return () => {
+          layers.current.delete(draw);
+        };
+      },
     }),
     [],
   );
+
+  const [atmosphere, setAtmosphere] = useState(false);
 
   useEffect(() => {
     setLive(
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     );
   }, []);
+
+  /* Com movimento reduzido não há cena para decorar: nem canvas, nem
+     atmosfera, nem loop. */
+  useEffect(() => {
+    if (!live) return;
+    return whenIdle(() => setAtmosphere(true));
+  }, [live]);
 
   /* ── entrada do título ───────────────────────────────────────────────
      Três linhas mascaradas subindo de dentro do próprio corte. O título
@@ -103,6 +150,8 @@ export default function Fall() {
     const render = () => {
       const p = scrollYProgress.get();
       box.style.backgroundColor = skyAt(p);
+
+      for (const draw of layers.current) draw({ p, H, W, D, mobile });
 
       for (const [el, { params, phase }] of items.current) {
         const dv = ((params.t - p) * D) / H;
@@ -227,6 +276,13 @@ export default function Fall() {
         data-fall={live ? "live" : undefined}
       >
         <div className={styles.scene} ref={scene}>
+          {atmosphere && (
+            <>
+              <Starfield />
+              <Atmosphere />
+            </>
+          )}
+
           <div className={styles.stack}>
             <FallItem params={FALL_HERO} className={`${styles.item} ${styles.hero}`}>
               <h1 className="d1" ref={title}>

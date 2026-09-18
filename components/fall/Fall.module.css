@@ -43,6 +43,9 @@
   display: block;
   padding: 0;
   height: 100%;
+  /* Entre o fundo (canvas e atmosfera de trás) e as nuvens da frente. */
+  position: relative;
+  z-index: 2;
 }
 
 .fall[data-fall="live"] .item {
