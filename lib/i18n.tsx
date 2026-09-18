@@ -27,19 +27,42 @@ const I18nContext = createContext<I18n>({
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>("pt");
 
-  // Lê a preferência salva só depois da hidratação, para servidor e cliente
-  // renderizarem o mesmo HTML no primeiro passo.
+  /**
+   * Preferência salva vence; sem ela, o idioma do navegador decide.
+   * Tudo isso só depois da hidratação: o primeiro render continua em `pt`
+   * nos dois lados, senão servidor e cliente divergem.
+   */
   useEffect(() => {
+    let saved: string | null = null;
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === "en" || saved === "pt") setLocale(saved);
+      saved = localStorage.getItem(STORAGE_KEY);
     } catch {
-      /* localStorage indisponível — segue em pt */
+      /* localStorage indisponível — cai no navegador */
     }
+
+    if (saved === "en" || saved === "pt") {
+      setLocale(saved);
+      return;
+    }
+
+    const nav = navigator.language ?? "";
+    setLocale(nav.toLowerCase().startsWith("pt") ? "pt" : "en");
   }, []);
 
+  /**
+   * O idioma da página, o título da aba e a descrição acompanham a
+   * troca. O `metadata` do layout é estático e só serve ao primeiro
+   * HTML — quem lê a página depois de trocar de idioma precisa ver a
+   * aba trocar junto.
+   */
   useEffect(() => {
+    const t = content[locale];
     document.documentElement.lang = locale === "en" ? "en" : "pt-BR";
+    document.title = t.meta.title;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", t.meta.description);
+
     try {
       localStorage.setItem(STORAGE_KEY, locale);
     } catch {

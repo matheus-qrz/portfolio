@@ -1,0 +1,261 @@
+/* ─────────────────────────────────────────────────────────────────────
+   A queda
+
+   Enquanto o JavaScript não assume, e sempre que o visitante pede
+   movimento reduzido, isto é uma coluna comum: os itens ficam no fluxo,
+   um embaixo do outro, tudo legível e clicável. O `data-fall="live"` é
+   que liga a cena — é ele que tira os itens do fluxo e entrega o
+   posicionamento ao loop.
+   ──────────────────────────────────────────────────────────────────── */
+.fall {
+  position: relative;
+  background: linear-gradient(180deg, #04060c, #0a1122 62%, var(--noite));
+}
+
+.scene {
+  position: relative;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(64px, 12vh, 132px);
+  padding-bottom: clamp(96px, 16vh, 180px);
+}
+
+/* ── cena viva ─────────────────────────────────────────────────────── */
+.fall[data-fall="live"] {
+  height: 720vh;
+  background: none;
+}
+
+.fall[data-fall="live"] .scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  /* Cor de partida; a partir do primeiro quadro quem escreve é o loop. */
+  background-color: #04060c;
+}
+
+.fall[data-fall="live"] .stack {
+  display: block;
+  padding: 0;
+  height: 100%;
+  /* Entre o fundo (canvas e atmosfera de trás) e as nuvens da frente. */
+  position: relative;
+  z-index: 2;
+}
+
+.fall[data-fall="live"] .item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  /* Escondido até o loop dizer onde o item está. Sem isto, o primeiro
+     quadro da cena viva sai com tudo empilhado no centro — e o
+     navegador baixa todos os prints de uma vez, achando que estão à
+     vista. */
+  visibility: hidden;
+  transform: translate(-50%, -50%);
+  /* Só transform e opacity animam. */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.item {
+  max-width: 100%;
+}
+
+/* ── hero ──────────────────────────────────────────────────────────────
+   O hero é o elemento de LCP, e ele não pode se mexer quando a cena
+   passa de coluna estática a cena viva: um segundo lugar para o mesmo
+   parágrafo é uma segunda candidatura a LCP, contada depois da
+   hidratação.
+
+   Na cena viva o hero fica centrado na tela, porque o `t` dele é zero e
+   o transform em repouso é exatamente `translate(-50%,-50%)`. Na coluna
+   estática, estas duas regras o põem no mesmo lugar: mesma largura,
+   mesmo recuo lateral, centrado nos primeiros 100svh. Assim o navegador
+   pinta o parágrafo no lugar definitivo já na primeira pintura, sem
+   esperar JavaScript nenhum.
+   ──────────────────────────────────────────────────────────────────── */
+.hero {
+  width: min(1020px, 92vw);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+.fall:not([data-fall="live"]) .hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Cada linha do título sobe de dentro do próprio corte. */
+.line {
+  display: block;
+  overflow: hidden;
+}
+
+.line > span {
+  display: block;
+}
+
+.sub {
+  color: var(--nevoa);
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.65;
+  max-width: 54ch;
+  margin: 22px 0 0;
+}
+
+.doors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+/* As duas portas: mesma forma, pesos diferentes. Só a primeira é brasa —
+   a brasa marca uma coisa por tela. */
+.door {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--fio-forte);
+  background: rgba(9, 12, 20, 0.35);
+  color: var(--papel);
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.door:hover {
+  border-color: var(--papel);
+  transform: translateY(-2px);
+}
+
+.doorLabel {
+  font-size: 15.5px;
+  font-variation-settings: "wdth" 100, "wght" 700;
+}
+
+.doorHint {
+  font-size: 12.5px;
+  color: var(--nevoa);
+  font-variation-settings: "wdth" 64, "wght" 300;
+  letter-spacing: 0.02em;
+}
+
+.doorSite {
+  border-color: var(--brasa);
+  background: var(--brasa);
+  color: var(--noite);
+}
+
+.doorSite:hover {
+  border-color: #ff8154;
+  background: #ff8154;
+}
+
+.doorSite .doorHint {
+  color: rgba(9, 12, 20, 0.72);
+}
+
+.scroll {
+  margin: 34px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--nevoa);
+  font-variation-settings: "wdth" 88, "wght" 600;
+}
+
+/* ── bloco de projeto ──────────────────────────────────────────────── */
+.card {
+  width: min(430px, 88vw);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+.fall[data-fall="live"] .card {
+  padding-inline: 0;
+}
+
+/* Exceção à regra acima: no topo da página o hero já está no lugar
+   definitivo, então não há nada a esperar. */
+.fall[data-fall="live"] .hero {
+  visibility: visible;
+}
+
+.cardKind {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brasa);
+  font-variation-settings: "wdth" 88, "wght" 600;
+  margin: 0 0 10px;
+}
+
+.cardName {
+  font-variation-settings: "wdth" 118, "wght" 820;
+  font-size: clamp(26px, 3.4vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.028em;
+  margin: 0;
+}
+
+.cardLine {
+  color: var(--nevoa);
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 14px 0 0;
+}
+
+.cardStack {
+  font-variation-settings: "wdth" 64, "wght" 300;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--nevoa);
+  margin: 14px 0 0;
+}
+
+.cardVisit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 13.5px;
+  font-variation-settings: "wdth" 96, "wght" 600;
+  color: var(--papel);
+  text-decoration: none;
+  border-bottom: 1px solid var(--fio-forte);
+  padding-bottom: 2px;
+}
+
+.cardVisit:hover {
+  border-bottom-color: var(--brasa);
+}
+
+@media (max-width: 900px) {
+  .card {
+    width: min(360px, 84vw);
+  }
+}
+
+/* ── print ─────────────────────────────────────────────────────────── */
+.shot {
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+}

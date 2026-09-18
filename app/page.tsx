@@ -1,35 +1,36 @@
 import About from "@/components/About";
 import Contact from "@/components/Contact";
-import Experience from "@/components/Experience";
+import Fall from "@/components/fall/Fall";
 import Footer from "@/components/Footer";
-import Hero from "@/components/Hero";
-import Nav from "@/components/Nav";
-import PrintDemo from "@/components/PrintDemo";
-import Projects from "@/components/Projects";
-import Rails from "@/components/Rails";
-import Showcase from "@/components/Showcase";
+import Proof from "@/components/Proof";
+import SiteHeader from "@/components/SiteHeader";
+import Sites from "@/components/Sites";
 import SmoothScroll from "@/components/SmoothScroll";
+import Software from "@/components/Software";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { LocaleProvider } from "@/lib/i18n";
+import { QuoteKindProvider } from "@/lib/quoteKind";
 
 export default function Home() {
   return (
     <LocaleProvider>
-      <SmoothScroll />
-      <Rails />
-      <Nav />
-      {/* Ordem de página de venda: gancho, prova, pedido — e só então o
-          detalhe, para quem quiser mais. A ordem canônica vive em
-          SECTIONS, em lib/content.ts, de onde saem a numeração e o menu. */}
-      <main>
-        <Hero />
-        <Showcase />
-        <Contact />
-        <Projects />
-        <PrintDemo />
-        <About />
-        <Experience />
-      </main>
-      <Footer />
+      <QuoteKindProvider>
+        <SmoothScroll />
+        <SiteHeader />
+        {/* A ordem canônica da página vive em SECTIONS, em lib/content.ts:
+            a queda (hero + os quatro projetos), sites, sistemas, prova,
+            orçamento e sobre. */}
+        <main id="top">
+          <Fall />
+          <Sites />
+          <Software />
+          <Proof />
+          <Contact />
+          <About />
+        </main>
+        <Footer />
+        <WhatsAppButton />
+      </QuoteKindProvider>
     </LocaleProvider>
   );
 }

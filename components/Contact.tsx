@@ -1,10 +1,13 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import { LINKS, sectionIndex } from "@/lib/content";
+import { LINKS, QUOTE_KINDS_ORDER } from "@/lib/content";
 import { fieldErrors, type FieldName } from "@/lib/quote";
 import { useI18n } from "@/lib/i18n";
+import { useQuoteKind } from "@/lib/quoteKind";
+import { whatsappHref } from "@/lib/whatsapp";
 import { useReveal } from "@/hooks/useReveal";
+import { WhatsAppGlyph } from "./WhatsAppButton";
 import styles from "./Contact.module.css";
 
 function ArrowOut() {
@@ -26,15 +29,14 @@ type Status = "idle" | "sending" | "ok" | "error";
 export default function Contact() {
   const root = useRef<HTMLElement>(null);
   const { t } = useI18n();
-  const f = t.contact.form;
+  const { kind, setKind } = useQuoteKind();
+  const f = t.quote.form;
 
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
+  useReveal(root);
 
-  useReveal(root, [
-    { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
-    { selector: `.${styles.card}`, start: "top 88%", y: 20, duration: 0.8 },
-  ]);
+  const whatsapp = whatsappHref(t.whatsapp.message);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,12 +47,12 @@ export default function Contact() {
     if (problems) {
       setErrors(
         Object.fromEntries(
-          Object.entries(problems).map(([k, v]) => [k, f[v]]),
+          Object.entries(problems).map(([field, code]) => [field, f[code]]),
         ) as Partial<Record<FieldName, string>>,
       );
       setStatus("idle");
-      const firstBad = Object.keys(problems)[0];
-      form.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
+      const first = Object.keys(problems)[0];
+      form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
       return;
     }
 
@@ -73,28 +75,52 @@ export default function Contact() {
   const busy = status === "sending";
 
   return (
-    <section id="contact" className={`sec ${styles.contact}`} ref={root}>
+    <section id="orcamento" className="sec" ref={root}>
       <div className="shell">
         <div className="secHead">
-          <div className="top">
-            <p className="eyebrow">{t.contact.eyebrow}</p>
-            <span className="idx">{sectionIndex("contact")}</span>
-          </div>
-          <h2 className="h2">{t.contact.h}</h2>
-          <p className="lede">{t.contact.lede}</p>
+          <p className="eyebrow" data-reveal>
+            {t.quote.eyebrow}
+          </p>
+          <h2 className="d2" data-reveal>
+            {t.quote.h}
+          </h2>
+          <p className="lede" data-reveal>
+            {t.quote.lede}
+          </p>
         </div>
 
         <div className={styles.grid}>
-          <div className={styles.card}>
-            <p className={styles.cardTitle}>{f.title}</p>
+          {status === "ok" ? (
+            <div className={styles.result} role="status">
+              <p className={styles.resultTitle}>{f.okTitle}</p>
+              <p className={styles.resultBody}>{f.okBody}</p>
+            </div>
+          ) : (
+            <form className={styles.form} onSubmit={onSubmit} noValidate>
+              {/*
+                O tipo já vem marcado por quem clicou numa das portas do
+                hero ou num CTA de seção: não faz sentido perguntar de
+                novo o que a pessoa acabou de responder clicando.
+              */}
+              <fieldset className={styles.row}>
+                <legend className={styles.label}>{f.kindLabel}</legend>
+                <div className={styles.kinds}>
+                  {QUOTE_KINDS_ORDER.map((option) => (
+                    <label className={styles.kind} key={option}>
+                      <input
+                        type="radio"
+                        name="kind"
+                        value={option}
+                        checked={kind === option}
+                        onChange={() => setKind(option)}
+                      />
+                      <span>{f.kinds[option]}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
 
-            {status === "ok" ? (
-              <div className={styles.result} role="status">
-                <p className={styles.resultTitle}>{f.okTitle}</p>
-                <p className={styles.resultBody}>{f.okBody}</p>
-              </div>
-            ) : (
-              <form className={styles.form} onSubmit={onSubmit} noValidate>
+              <div className={styles.pair}>
                 <div className={styles.row}>
                   <label className={styles.label} htmlFor="q-name">
                     {f.name}
@@ -104,6 +130,7 @@ export default function Contact() {
                     id="q-name"
                     name="name"
                     autoComplete="name"
+                    maxLength={120}
                     aria-invalid={!!errors.name}
                     aria-describedby={errors.name ? "q-name-err" : undefined}
                   />
@@ -112,18 +139,6 @@ export default function Contact() {
                       {errors.name}
                     </p>
                   )}
-                </div>
-
-                <div className={styles.row}>
-                  <label className={styles.label} htmlFor="q-company">
-                    {f.company} <span className={styles.hint}>{f.companyHint}</span>
-                  </label>
-                  <input
-                    className={styles.input}
-                    id="q-company"
-                    name="company"
-                    autoComplete="organization"
-                  />
                 </div>
 
                 <div className={styles.row}>
@@ -137,6 +152,7 @@ export default function Contact() {
                     type="email"
                     inputMode="email"
                     autoComplete="email"
+                    maxLength={200}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "q-email-err" : undefined}
                   />
@@ -146,62 +162,120 @@ export default function Contact() {
                     </p>
                   )}
                 </div>
+              </div>
+
+              <div className={styles.pair}>
+                <div className={styles.row}>
+                  <label className={styles.label} htmlFor="q-company">
+                    {f.company}{" "}
+                    <span className={styles.hint}>{f.optional}</span>
+                  </label>
+                  <input
+                    className={styles.input}
+                    id="q-company"
+                    name="company"
+                    autoComplete="organization"
+                    maxLength={160}
+                  />
+                </div>
 
                 <div className={styles.row}>
-                  <label className={styles.label} htmlFor="q-need">
-                    {f.need}
+                  <label className={styles.label} htmlFor="q-phone">
+                    {f.phone} <span className={styles.hint}>{f.phoneHint}</span>
                   </label>
-                  <textarea
-                    className={`${styles.input} ${styles.textarea}`}
-                    id="q-need"
-                    name="need"
-                    rows={5}
-                    aria-invalid={!!errors.need}
-                    aria-describedby="q-need-hint"
-                  />
-                  <p className={styles.hintBlock} id="q-need-hint">
-                    {errors.need ? (
-                      <span className={styles.err}>{errors.need}</span>
-                    ) : (
-                      f.needHint
-                    )}
-                  </p>
-                </div>
-
-                {/* Honeypot: fora da ordem de tabulação e escondido de
-                    leitores de tela. Bot preenche, humano não. */}
-                <div className={styles.pot} aria-hidden="true">
-                  <label htmlFor="q-website">Website</label>
                   <input
-                    id="q-website"
-                    name="website"
-                    tabIndex={-1}
-                    autoComplete="off"
+                    className={styles.input}
+                    id="q-phone"
+                    name="phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    maxLength={40}
+                    aria-invalid={!!errors.phone}
+                    aria-describedby={errors.phone ? "q-phone-err" : undefined}
                   />
+                  {errors.phone && (
+                    <p className={styles.err} id="q-phone-err">
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
+              </div>
 
-                <button className={styles.submit} type="submit" disabled={busy}>
-                  {busy ? f.sending : f.submit}
-                </button>
+              <div className={styles.row}>
+                <label className={styles.label} htmlFor="q-need">
+                  {f.need}
+                </label>
+                <textarea
+                  className={`${styles.input} ${styles.textarea}`}
+                  id="q-need"
+                  name="need"
+                  rows={5}
+                  maxLength={4000}
+                  aria-invalid={!!errors.need}
+                  aria-describedby="q-need-hint"
+                />
+                <p className={styles.hintBlock} id="q-need-hint">
+                  {errors.need ? (
+                    <span className={styles.err}>{errors.need}</span>
+                  ) : (
+                    f.needHint
+                  )}
+                </p>
+              </div>
 
-                {status === "error" && (
-                  <div className={styles.resultErr} role="alert">
-                    <p className={styles.resultTitle}>{f.errTitle}</p>
-                    <p className={styles.resultBody}>{f.errBody}</p>
-                  </div>
-                )}
+              {/* Honeypot: fora da ordem de tabulação e escondido de
+                  leitores de tela. Bot preenche, humano não. */}
+              <div className={styles.pot} aria-hidden="true">
+                <label htmlFor="q-website">Website</label>
+                <input
+                  id="q-website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
 
-                <p className={styles.privacy}>{f.privacy}</p>
-              </form>
-            )}
-          </div>
+              <button
+                className={`btn btn-brasa ${styles.submit}`}
+                type="submit"
+                disabled={busy}
+              >
+                {busy ? f.sending : f.submit}
+              </button>
+
+              {status === "error" && (
+                <div className={styles.result} role="alert">
+                  <p className={styles.resultTitle}>{f.errTitle}</p>
+                  <p className={styles.resultBody}>{f.errBody}</p>
+                </div>
+              )}
+
+              <p className={styles.privacy}>{f.privacy}</p>
+            </form>
+          )}
 
           <div className={styles.side}>
-            <p className={styles.sideLabel}>{t.contact.direct}</p>
+            <p className={styles.sideLabel}>{t.quote.direct}</p>
             <div className={styles.links}>
               <a className={styles.cta} href={`mailto:${LINKS.email}`}>
                 {LINKS.email}
               </a>
+              {/* Sem NEXT_PUBLIC_WHATSAPP não existe link — e o atalho
+                  simplesmente não aparece. */}
+              {whatsapp && (
+                <a
+                  className={styles.cta}
+                  href={whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span data-glyph="whatsapp">
+                    <WhatsAppGlyph />
+                  </span>
+                  {t.whatsapp.label}
+                </a>
+              )}
               <a
                 className={styles.cta}
                 href={LINKS.linkedin}
