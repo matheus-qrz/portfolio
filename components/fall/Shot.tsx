@@ -11,12 +11,25 @@ import styles from "./Shot.module.css";
  * solução que já resolveu o carrossel, e é ela que impede a cena de
  * saltar enquanto o arquivo não chegou.
  */
-export default function Shot({ shot }: { shot: FallShot }) {
+export default function Shot({
+  shot,
+  ready,
+}: {
+  shot: FallShot;
+  /**
+   * A caixa existe desde o HTML servido — é ela que segura a proporção.
+   * A imagem só é montada depois que a página está de pé: um print de
+   * 1440px a três mil pixels do primeiro quadro não tem o que fazer
+   * disputando banda com a primeira pintura.
+   */
+  ready: boolean;
+}) {
   const { locale } = useI18n();
   const phone = shot.kind === "phone";
 
   return (
     <figure className={`${styles.frame} ${phone ? styles.phone : styles.desk}`}>
+      {ready && (
       <Image
         className={styles.img}
         src={`/shots/${shot.file}`}
@@ -28,6 +41,7 @@ export default function Shot({ shot }: { shot: FallShot }) {
             : "(max-width: 900px) 76vw, 620px"
         }
       />
+      )}
     </figure>
   );
 }

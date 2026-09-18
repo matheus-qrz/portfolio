@@ -63,7 +63,7 @@
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--grafite);
+  color: var(--nevoa);
   margin: clamp(30px, 5vh, 46px) 0 0;
 }
 
@@ -84,7 +84,7 @@
   font-variation-settings: "wdth" 64, "wght" 300;
   font-size: 12.5px;
   letter-spacing: 0.04em;
-  color: var(--grafite);
+  color: var(--nevoa);
   white-space: nowrap;
 }
 

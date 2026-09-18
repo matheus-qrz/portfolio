@@ -133,7 +133,16 @@
     margin-inline-start: auto;
   }
 
+  /* Fora da tela, não fora do documento: some do layout sem levar junto
+     o nome acessível do link. */
   .markName {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }

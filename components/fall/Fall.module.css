@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: clamp(64px, 12vh, 132px);
-  padding-block: clamp(96px, 16vh, 180px);
+  padding-bottom: clamp(96px, 16vh, 180px);
 }
 
 /* ── cena viva ─────────────────────────────────────────────────────── */
@@ -53,6 +53,12 @@
   left: 50%;
   top: 50%;
   margin: 0;
+  /* Escondido até o loop dizer onde o item está. Sem isto, o primeiro
+     quadro da cena viva sai com tudo empilhado no centro — e o
+     navegador baixa todos os prints de uma vez, achando que estão à
+     vista. */
+  visibility: hidden;
+  transform: translate(-50%, -50%);
   /* Só transform e opacity animam. */
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -62,15 +68,32 @@
   max-width: 100%;
 }
 
-/* ── hero ──────────────────────────────────────────────────────────── */
+/* ── hero ──────────────────────────────────────────────────────────────
+   O hero é o elemento de LCP, e ele não pode se mexer quando a cena
+   passa de coluna estática a cena viva: um segundo lugar para o mesmo
+   parágrafo é uma segunda candidatura a LCP, contada depois da
+   hidratação.
+
+   Na cena viva o hero fica centrado na tela, porque o `t` dele é zero e
+   o transform em repouso é exatamente `translate(-50%,-50%)`. Na coluna
+   estática, estas duas regras o põem no mesmo lugar: mesma largura,
+   mesmo recuo lateral, centrado nos primeiros 100svh. Assim o navegador
+   pinta o parágrafo no lugar definitivo já na primeira pintura, sem
+   esperar JavaScript nenhum.
+   ──────────────────────────────────────────────────────────────────── */
 .hero {
   width: min(1020px, 92vw);
   margin-inline: auto;
   padding-inline: var(--gut);
 }
 
-.fall[data-fall="live"] .hero {
-  padding-inline: 0;
+.fall:not([data-fall="live"]) .hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 /* Cada linha do título sobe de dentro do próprio corte. */
@@ -154,7 +177,7 @@
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--grafite);
+  color: var(--nevoa);
   font-variation-settings: "wdth" 88, "wght" 600;
 }
 
@@ -167,6 +190,12 @@
 
 .fall[data-fall="live"] .card {
   padding-inline: 0;
+}
+
+/* Exceção à regra acima: no topo da página o hero já está no lugar
+   definitivo, então não há nada a esperar. */
+.fall[data-fall="live"] .hero {
+  visibility: visible;
 }
 
 .cardKind {
@@ -197,7 +226,7 @@
   font-variation-settings: "wdth" 64, "wght" 300;
   font-size: 12.5px;
   letter-spacing: 0.04em;
-  color: var(--grafite);
+  color: var(--nevoa);
   margin: 14px 0 0;
 }
 

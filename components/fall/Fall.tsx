@@ -2,11 +2,12 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { animate, stagger, useScroll } from "framer-motion";
+import { useScroll } from "framer-motion";
 import { FALL, FALL_HERO, type FallParams } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useKindLink } from "@/lib/quoteKind";
 import { registerAnchor } from "@/components/SmoothScroll";
+import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { FallContext, type FallLayer, type FallRegistry } from "./FallContext";
 import FallItem from "./FallItem";
 import Shot from "./Shot";
@@ -91,46 +92,66 @@ export default function Fall() {
     [],
   );
 
-  const [atmosphere, setAtmosphere] = useState(false);
+  /**
+   * Nada que seja cena, e não conteúdo, entra antes de a página estar
+   * de pé: nem a atmosfera, nem os prints. Os prints em especial pesam
+   * megabytes e ficam a milhares de pixels do primeiro quadro — deixá-los
+   * no caminho crítico é gastar a banda da primeira pintura com imagem
+   * que ninguém vai ver tão cedo.
+   */
+  const [deferred, setDeferred] = useState(false);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setLive(
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     );
   }, []);
 
+  useEffect(() => whenIdle(() => setDeferred(true)), []);
+
   /* Com movimento reduzido não há cena para decorar: nem canvas, nem
-     atmosfera, nem loop. */
-  useEffect(() => {
-    if (!live) return;
-    return whenIdle(() => setAtmosphere(true));
-  }, [live]);
+     atmosfera, nem loop. Os prints continuam — eles são conteúdo. */
+  const atmosphere = live && deferred;
 
   /* ── entrada do título ───────────────────────────────────────────────
-     Três linhas mascaradas subindo de dentro do próprio corte. O título
-     é o candidato provável a LCP, então a animação é curta e o texto já
-     está no HTML: o que se move é a posição, nunca a existência. */
+     Três linhas mascaradas subindo de dentro do próprio corte.
+
+     A duração é 0,6s, e não os 1,1s do desenho original: o título é o
+     elemento de LCP, e com a entrada longa a métrica batia em 2,8s no
+     Lighthouse mobile — acima do teto de 2,5s. O texto já está no HTML
+     servido; o que se move é a posição, nunca a existência. */
   useEffect(() => {
     if (!live || !title.current) return;
     const lines = title.current.querySelectorAll<HTMLElement>("[data-line]");
     if (!lines.length) return;
 
-    const controls = animate(
-      lines,
-      { y: ["105%", "0%"], opacity: [0, 1] },
-      {
-        duration: 1.1,
-        ease: [0.16, 1, 0.3, 1],
-        delay: stagger(0.08),
-      },
+    const running = Array.from(lines, (line, i) =>
+      line.animate(
+        [
+          { transform: "translateY(105%)", opacity: 0 },
+          { transform: "none", opacity: 1 },
+        ],
+        {
+          duration: 600,
+          delay: i * 60,
+          easing: "cubic-bezier(.16,1,.3,1)",
+          fill: "backwards",
+        },
+      ),
     );
-    return () => controls.stop();
+    return () => running.forEach((a) => a.cancel());
   }, [live]);
 
   /* ── o loop ──────────────────────────────────────────────────────────
      Um `requestAnimationFrame` só para a cena inteira. Nenhum `setState`
-     por quadro: o que sai daqui são três escritas de estilo por item. */
-  useEffect(() => {
+     por quadro: o que sai daqui são três escritas de estilo por item.
+
+     Efeito de layout, e não de pintura: a primeira chamada de `render`
+     tem de acontecer antes da tela desenhar. Saindo depois, o navegador
+     pinta um quadro com todos os itens empilhados no centro — e, pior,
+     conclui que todos os prints estão visíveis e os baixa de uma vez.
+     Foi assim que um print da queda virou o elemento de LCP. */
+  useIsomorphicLayoutEffect(() => {
     const root = section.current;
     const box = scene.current;
     if (!live || !root || !box) return;
@@ -158,11 +179,13 @@ export default function Fall() {
         const dv = ((params.t - p) * D) / H;
         const dy = dv * H * params.s;
 
+        /* O CSS esconde todo item da cena viva; quem revela é o loop.
+           Assim nada aparece — nem é baixado — antes de estar no lugar. */
         if (Math.abs(dy) > 1.6 * H) {
           if (el.style.visibility !== "hidden") el.style.visibility = "hidden";
           continue;
         }
-        if (el.style.visibility) el.style.visibility = "";
+        if (el.style.visibility !== "visible") el.style.visibility = "visible";
 
         const bx = ((mobile ? params.xm : params.x) * W) / 100;
         const by = ((mobile ? params.ym : params.y) * H) / 100;
@@ -363,7 +386,7 @@ export default function Fall() {
                         params={shot}
                         className={`${styles.item} ${styles.shot}`}
                       >
-                        <Shot shot={shot} />
+                        <Shot shot={shot} ready={deferred} />
                       </FallItem>
                     ))}
                 </Fragment>

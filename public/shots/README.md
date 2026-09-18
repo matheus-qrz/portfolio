@@ -49,6 +49,18 @@ Outras proporções são **cortadas a partir do canto superior esquerdo**
 importa preservar tem que estar em cima e à esquerda. Uma captura mais
 alta que a caixa perde o rodapé.
 
+## O que já está aqui
+
+| arquivo | onde aparece |
+| --- | --- |
+| `tableflow-home-1440.png` | queda, projeto Tableflow |
+| `meirendeu-home-1440.png` | queda, projeto MEI Rendeu |
+| `servin-home-1440.png` | nenhum lugar — Servin está em "Outros projetos", que é lista de texto |
+| `tijolo-home-1440.png` | idem, Vale o Tijolo |
+
+Os dois últimos ficam guardados na convenção nova caso "Outros projetos"
+um dia ganhe imagem. Hoje nenhum componente os referencia.
+
 ## Texto alternativo
 
 Cada print carrega o próprio `alt` nos dois idiomas, ali mesmo em `FALL`.

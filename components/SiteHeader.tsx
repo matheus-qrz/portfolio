@@ -57,6 +57,8 @@ export default function SiteHeader() {
 
   return (
     <header className={`${styles.chrome} ${solid ? styles.solid : ""}`}>
+      {/* Abaixo de 900px o nome sai da tela mas continua no DOM: é ele
+          que dá nome ao link, já que o monograma é decorativo. */}
       <a className={styles.mark} href="#top">
         <span className={styles.monogram} aria-hidden="true">
           MO

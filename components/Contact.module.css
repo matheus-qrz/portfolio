@@ -34,7 +34,7 @@
 }
 
 .hint {
-  color: var(--grafite);
+  color: var(--nevoa);
   font-variation-settings: "wdth" 64, "wght" 300;
 }
 
@@ -124,7 +124,7 @@
 }
 
 .hintBlock {
-  color: var(--grafite);
+  color: var(--nevoa);
   font-size: 13px;
   line-height: 1.55;
   margin: 0;
@@ -145,7 +145,7 @@
 }
 
 .privacy {
-  color: var(--grafite);
+  color: var(--nevoa);
   font-size: 12.5px;
   line-height: 1.55;
   margin: 0;
@@ -182,7 +182,7 @@
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--grafite);
+  color: var(--nevoa);
   margin: 0;
 }
 

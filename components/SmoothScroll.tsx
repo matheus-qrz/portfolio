@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Lenis from "lenis";
+import type Lenis from "lenis";
 
 /**
  * Instância viva do Lenis, guardada no módulo para que qualquer seção
@@ -65,15 +65,25 @@ export default function SmoothScroll() {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
+    /**
+     * O Lenis chega por import dinâmico: rolagem suave é melhoria, não
+     * requisito, e ele não tem o que fazer no caminho da primeira
+     * pintura. Até ele chegar, as âncoras já funcionam pelo scroll
+     * nativo.
+     */
     let frame = 0;
+    let alive = true;
     if (!reduced) {
-      const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
-      current = lenis;
-      const raf = (time: number) => {
-        lenis.raf(time);
+      void import("lenis").then(({ default: Lenis }) => {
+        if (!alive) return;
+        const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+        current = lenis;
+        const raf = (time: number) => {
+          lenis.raf(time);
+          frame = requestAnimationFrame(raf);
+        };
         frame = requestAnimationFrame(raf);
-      };
-      frame = requestAnimationFrame(raf);
+      });
     }
 
     const onAnchorClick = (event: MouseEvent) => {
@@ -94,6 +104,7 @@ export default function SmoothScroll() {
     document.addEventListener("click", onAnchorClick);
 
     return () => {
+      alive = false;
       document.removeEventListener("click", onAnchorClick);
       if (frame) cancelAnimationFrame(frame);
       current?.destroy();
