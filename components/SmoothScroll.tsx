@@ -6,6 +6,21 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
 /**
+ * Instância viva do Lenis, guardada no módulo para que qualquer seção
+ * possa mandar a página até uma posição sem brigar com o rAF dele.
+ */
+let current: Lenis | null = null;
+
+/**
+ * Leva a página até `y`. Com o Lenis de pé, usa o próprio Lenis; sem ele
+ * (movimento reduzido, JS parcial), cai no scroll nativo.
+ */
+export function scrollToY(y: number, duration = 1) {
+  if (current) current.scrollTo(y, { duration });
+  else window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+/**
  * Liga o Lenis ao ScrollTrigger e trata âncoras internas.
  * Não renderiza nada; existe só pelos efeitos.
  */
@@ -16,6 +31,7 @@ export default function SmoothScroll() {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+    current = lenis;
     lenis.on("scroll", ScrollTrigger.update);
 
     let frame = 0;
@@ -42,6 +58,7 @@ export default function SmoothScroll() {
       document.removeEventListener("click", onAnchorClick);
       cancelAnimationFrame(frame);
       lenis.destroy();
+      current = null;
     };
   }, []);
 
