@@ -129,7 +129,7 @@ lugar dele. Detalhes em `public/shots/README.md`.
 
 ## Oferta
 
-- **Sites**: preço por idioma — PT "A partir de R$ 2.000", EN "Starting
+- **Sites**: preço por idioma — PT "A partir de R$ 800", EN "Starting
   at US$500". Não existe plano nem mensalidade obrigatória; manutenção
   mensal é opcional. A moeda segue o idioma; se um dia precisar seguir o
   país, o header `x-vercel-ip-country` já chega na requisição (há um

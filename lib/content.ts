@@ -475,7 +475,7 @@ const pt: Content = {
   meta: {
     title: "Matheus Oliveira — Sites e sistemas para o seu negócio",
     description:
-      "Sites rápidos para negócios, a partir de R$ 2.000, e sistemas sob medida. Engenheiro de software em João Pessoa.",
+      "Sites rápidos para negócios, a partir de R$ 800, e sistemas sob medida. Engenheiro de software em João Pessoa.",
   },
 
   hero: {
@@ -484,7 +484,7 @@ const pt: Content = {
     doors: {
       site: {
         label: "Site para o seu negócio",
-        hint: "A partir de R$ 2.000",
+        hint: "A partir de R$ 800",
       },
       software: {
         label: "Sistema sob medida",
@@ -530,7 +530,7 @@ const pt: Content = {
     h: "Um site que o seu cliente acha, entende e usa.",
     lede: "Site de negócio costuma falhar nas mesmas três coisas: demora para abrir, não aparece no Google e ninguém sabe atualizar depois que a agência some. Eu resolvo as três de uma vez.",
     price: {
-      value: "A partir de R$ 2.000",
+      value: "A partir de R$ 800",
       note: "O valor final depende de quantas páginas são, do que precisa ser integrado e de quem escreve os textos. Não existe plano nem mensalidade obrigatória — manutenção mensal é opcional e contratada à parte.",
     },
     includesLabel: "O que costuma entrar",

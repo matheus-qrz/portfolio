@@ -27,11 +27,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://matheusoliveira.dev"),
   title: "Matheus Oliveira — Sites e sistemas para o seu negócio",
   description:
-    "Sites rápidos para negócios, a partir de R$ 2.000, e sistemas sob medida. Engenheiro de software em João Pessoa.",
+    "Sites rápidos para negócios, a partir de R$ 800, e sistemas sob medida. Engenheiro de software em João Pessoa.",
   openGraph: {
     title: "Matheus Oliveira — Sites e sistemas para o seu negócio",
     description:
-      "Site para o seu negócio a partir de R$ 2.000 e sistema sob medida com escopo por escrito. Engenheiro de software em João Pessoa.",
+      "Site para o seu negócio a partir de R$ 800 e sistema sob medida com escopo por escrito. Engenheiro de software em João Pessoa.",
     siteName: "Matheus Oliveira",
     locale: "pt_BR",
     type: "website",
