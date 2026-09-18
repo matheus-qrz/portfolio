@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Archivo, IBM_Plex_Mono, Martian_Mono } from "next/font/google";
+import { Archivo, IBM_Plex_Mono, Martian_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -44,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${archivo.variable} ${martian.variable} ${plex.variable}`}
+      className={cn(archivo.variable, martian.variable, plex.variable, "font-sans", inter.variable)}
     >
       <body>
         <div className="grain" aria-hidden="true" />

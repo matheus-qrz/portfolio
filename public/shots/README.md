@@ -13,7 +13,6 @@ O nome do arquivo é o **id do produto**, em `.png`:
 | `meirendeu` | MEI Rendeu     |
 | `servin`    | Servin         |
 | `tijolo`    | Vale o Tijolo? |
-| `copa`      | Copa AI        |
 
 Ou seja: `public/shots/tableflow.png`, `public/shots/servin.png`, e assim
 por diante.

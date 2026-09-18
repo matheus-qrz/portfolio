@@ -326,8 +326,6 @@ const pt: Content = {
         "Pousada e hotel têm o mesmo gargalo: o hóspede liga para a recepção e a recepção vira telefonista. Aqui ele lê o QR do quarto e pede direto. O chamado vai para o setor certo — cozinha, governança, manutenção — e sai impresso lá dentro. A recepção acompanha tudo num painel só e para de ser intermediária de cada pedido de toalha.",
       tijolo:
         "Comprar ou alugar é a maior decisão financeira da vida da maioria das pessoas, e quase todo mundo decide no achismo. A calculadora compara os dois cenários com juros, ITBI, custo de oportunidade da entrada e valorização do imóvel, e devolve um relatório em PDF que dá para levar ao banco. Ferramenta paga, estática, sem backend: carrega em segundos e não tem servidor para cair.",
-      copa:
-        "Micro-SaaS de ciclo curto: o usuário sobe uma foto, paga uma vez e recebe a própria figurinha da Copa 2026 em segundos. Todo o valor está no pipeline — fila de geração por IA, tratamento da imagem, entrega e cobrança avulsa — rodando rápido o bastante para ninguém desistir no meio.",
     },
     visit: "Abrir o site",
     repo: "Ver o código",
@@ -408,12 +406,6 @@ const pt: Content = {
         desc: "Landing page e ERP interno para uma empresa de mobilidade elétrica: catálogo, pedidos, estoque e o fluxo comercial no mesmo lugar.",
         state: "Em desenvolvimento",
       },
-      copa: {
-        name: "Copa AI",
-        host: "micro-SaaS",
-        desc: "Micro-SaaS que transforma a foto do usuário em figurinha da Copa 2026. Pipeline de geração por IA, pagamento avulso e entrega em segundos.",
-        state: "Concluído",
-      },
     },
   },
   about: {
@@ -431,7 +423,7 @@ const pt: Content = {
     h: "Cinco anos entregando",
     roles: [
       {
-        when: "2023 → hoje",
+        when: "2022 → hoje",
         role: "Engenheiro de software autônomo",
         org: "Independente",
         desc: "SaaS próprios e projetos de cliente, do primeiro commit ao faturamento. Frontend, backend, infraestrutura, pagamento e a conversa difícil com o cliente.",
@@ -654,12 +646,6 @@ const en: Content = {
         desc: "Landing page and internal ERP for an electric mobility company: catalogue, orders, stock and the sales flow in one place.",
         state: "In development",
       },
-      copa: {
-        name: "Copa AI",
-        host: "micro-SaaS",
-        desc: "Micro-SaaS turning a user's photo into a World Cup 2026 sticker. AI generation pipeline, one-off payment, delivery in seconds.",
-        state: "Shipped",
-      },
     },
   },
   about: {
@@ -677,7 +663,7 @@ const en: Content = {
     h: "Five years shipping",
     roles: [
       {
-        when: "2023 → now",
+        when: "2022 → now",
         role: "Independent software engineer",
         org: "Self-employed",
         desc: "Own SaaS products and client projects, from first commit to revenue. Frontend, backend, infrastructure, payments and the hard conversation with the client.",
