@@ -49,8 +49,20 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     setLocale(nav.toLowerCase().startsWith("pt") ? "pt" : "en");
   }, []);
 
+  /**
+   * O idioma da página, o título da aba e a descrição acompanham a
+   * troca. O `metadata` do layout é estático e só serve ao primeiro
+   * HTML — quem lê a página depois de trocar de idioma precisa ver a
+   * aba trocar junto.
+   */
   useEffect(() => {
+    const t = content[locale];
     document.documentElement.lang = locale === "en" ? "en" : "pt-BR";
+    document.title = t.meta.title;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", t.meta.description);
+
     try {
       localStorage.setItem(STORAGE_KEY, locale);
     } catch {

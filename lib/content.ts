@@ -357,6 +357,9 @@ export const OTHERS: OtherProject[] = [
 
 export type QuoteKind = "site" | "sistema" | "indefinido";
 
+/** A ordem em que as pílulas de tipo aparecem no formulário. */
+export const QUOTE_KINDS_ORDER: QuoteKind[] = ["site", "sistema", "indefinido"];
+
 export interface Content {
   menu: { sites: string; software: string; work: string; about: string };
   quoteCta: string;

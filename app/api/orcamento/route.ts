@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { quoteSchema } from "@/lib/quote";
+import type { QuoteKind } from "@/lib/content";
 
 export const runtime = "nodejs";
 
@@ -44,6 +45,13 @@ function escapeHtml(value: string): string {
     .replace(/"/g, "&quot;");
 }
 
+/** O assunto do e-mail já diz que tipo de trabalho é. */
+const KIND: Record<QuoteKind, string> = {
+  site: "Site",
+  sistema: "Sistema",
+  indefinido: "A definir",
+};
+
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -60,7 +68,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { name, company, email, need, website } = parsed.data;
+  const { kind, name, company, email, phone, need, website } = parsed.data;
 
   // Honeypot preenchido: responde 200 para o bot não aprender nada,
   // e não envia nada.
@@ -83,9 +91,11 @@ export async function POST(req: Request) {
   }
 
   const linhas = [
+    ["Tipo", KIND[kind]],
     ["Nome", name],
     ["Empresa", company || "—"],
     ["E-mail", email],
+    ["WhatsApp", phone || "—"],
   ] as const;
 
   try {
@@ -94,7 +104,7 @@ export async function POST(req: Request) {
       from: FROM,
       to: TO,
       replyTo: email, // responder direto do cliente de e-mail
-      subject: `Orçamento — ${name}${company ? ` · ${company}` : ""}`,
+      subject: `Orçamento · ${KIND[kind]} — ${name}${company ? ` · ${company}` : ""}`,
       text: [
         ...linhas.map(([k, v]) => `${k}: ${v}`),
         "",
