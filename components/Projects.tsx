@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS, sectionIndex } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
@@ -12,8 +14,32 @@ export default function Projects() {
 
   useReveal(root, [
     { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
-    { selector: `.${styles.item}`, start: "top 92%", y: 18, duration: 0.6 },
   ]);
+
+  /**
+   * A lista deixou de ser grade: cada linha é revelada de cima para baixo,
+   * por corte, uma por vez conforme entra na tela — o mesmo gesto da
+   * máscara de linha do título, aplicado a uma régua inteira.
+   */
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      for (const row of gsap.utils.toArray<HTMLElement>(`.${styles.item}`)) {
+        gsap.from(row, {
+          scrollTrigger: { trigger: row, start: "top 92%", once: true },
+          clipPath: "inset(0% 0% 100% 0%)",
+          y: 20,
+          duration: 0.85,
+          ease: "expo.out",
+        });
+      }
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section id="work" className="sec" ref={root}>

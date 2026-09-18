@@ -22,9 +22,6 @@ export default function Home() {
           SECTIONS, em lib/content.ts, de onde saem a numeração e o menu. */}
       <main>
         <Hero />
-        <div className="shell">
-          <div className="rule" />
-        </div>
         <Showcase />
         <Contact />
         <Projects />

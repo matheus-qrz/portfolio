@@ -2,7 +2,10 @@
   border-top: 1px solid var(--line);
 }
 
+/* O `clip-path` precisa existir em repouso para o GSAP ter de onde e
+   para onde interpolar na revelação. */
 .item {
+  clip-path: inset(0% 0% 0% 0%);
   display: grid;
   grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1.25fr) 96px;
   gap: clamp(12px, 2.2vw, 30px);

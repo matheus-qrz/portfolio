@@ -36,8 +36,22 @@
 }
 
 .links {
+  position: relative;
   display: flex;
   gap: 4px;
+}
+
+/* O risco que desliza entre os rótulos. Começa invisível: sem JS, o
+   estado ativo continua vindo do `aria-current` abaixo. */
+.ink {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: var(--red);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .link {
@@ -55,10 +69,12 @@
     background 0.18s;
 }
 
-.link:hover,
+.link:hover {
+  color: var(--bone);
+}
+
 .link[aria-current="true"] {
   color: var(--paper);
-  background: var(--ink-3);
 }
 
 .right {

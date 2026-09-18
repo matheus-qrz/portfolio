@@ -161,7 +161,10 @@ export interface Content {
   status: string;
   hero: {
     meta: string[];
-    headline: string;
+    /** Título em linhas já quebradas à mão: cada uma é uma máscara. */
+    lines: string[];
+    /** Chamada logo abaixo; o trecho entre ** ** é o hiperquadro. */
+    kicker: string;
     sub: string;
     ctaTalk: string;
     ctaWork: string;
@@ -262,8 +265,8 @@ const pt: Content = {
       "Engenheiro de software autônomo",
       "João Pessoa, PB",
     ],
-    headline:
-      "Todo negócio roda sobre uma regra que ninguém escreveu. Meu trabalho é **transformar isso em software**.",
+    lines: ["Todo negócio roda", "sobre uma regra que", "ninguém escreveu."],
+    kicker: "Meu trabalho é transformar isso em **software**.",
     sub: "Restaurante, pousada, contabilidade de MEI, imobiliária, checkout de pagamento, site de escritório. Domínios diferentes, mesmo trabalho: entrar na operação, entender como ela realmente funciona e entregar um sistema que aguenta o dia a dia.",
     ctaTalk: "Pedir um orçamento",
     ctaWork: "Ver os projetos",
@@ -508,8 +511,8 @@ const en: Content = {
       "Independent software engineer",
       "João Pessoa, Brazil",
     ],
-    headline:
-      "Every business runs on a rule nobody wrote down. I **turn it into software**.",
+    lines: ["Every business runs", "on a rule nobody", "ever wrote down."],
+    kicker: "I turn that into **software**.",
     sub: "Restaurants, guesthouses, sole-trader bookkeeping, real estate, payment checkout, law firm sites. Different domains, same job: get inside the operation, work out how it actually runs, and ship a system that survives daily use.",
     ctaTalk: "Get a quote",
     ctaWork: "See the work",
