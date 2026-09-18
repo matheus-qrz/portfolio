@@ -81,7 +81,9 @@ export interface FallProject {
 
 /** Movimento do título de abertura, no topo da queda. */
 export const FALL_HERO: FallParams = {
-  t: 0.045,
+  /* Zero: no topo da página o título tem de estar centrado, não já em
+     movimento. Ele sobe assim que a rolagem começa. */
+  t: 0,
   s: 1,
   x: 0,
   y: 0,

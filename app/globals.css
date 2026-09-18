@@ -123,7 +123,7 @@ a {
    ──────────────────────────────────────────────────────────────────── */
 .d1 {
   font-variation-settings: "wdth" 122, "wght" 840;
-  font-size: clamp(38px, 8.2vw, 104px);
+  font-size: clamp(27px, 6.2vw, 82px);
   line-height: 0.92;
   letter-spacing: -0.035em;
   margin: 0;
