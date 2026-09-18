@@ -6,54 +6,38 @@ import { emphasize, useI18n } from "@/lib/i18n";
 import { useReveal } from "@/hooks/useReveal";
 import styles from "./About.module.css";
 
+/**
+ * "Sobre" e "Trajetória" viraram uma seção só. Separadas, a segunda era
+ * uma lista de empregos sem contexto logo depois de um texto que já
+ * tinha dito o que importava — juntas, a trajetória é a nota de rodapé
+ * do texto, que é o lugar dela.
+ */
 export default function About() {
   const root = useRef<HTMLElement>(null);
   const { t } = useI18n();
-
-  useReveal(root, [
-    { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
-    {
-      selector: `.${styles.portrait} img`,
-      trigger: "#about",
-      start: "top 78%",
-      x: -22,
-      y: 0,
-      duration: 1.15,
-    },
-    {
-      selector: `.${styles.caption}`,
-      trigger: "#about",
-      start: "top 78%",
-      y: 10,
-      duration: 0.7,
-      delay: 0.35,
-      ease: "power3.out",
-    },
-    {
-      selector: `.${styles.body} p`,
-      start: "top 88%",
-      y: 18,
-      stagger: 0.09,
-      duration: 0.7,
-    },
-  ]);
+  useReveal(root);
 
   return (
     <section id="about" className="sec" ref={root}>
       <div className="shell">
         <div className="secHead">
-          <p className="eyebrow">{t.about.eyebrow}</p>
+          <p className="eyebrow" data-reveal>
+            {t.about.eyebrow}
+          </p>
+          <h2 className="d2" data-reveal>
+            {t.about.h}
+          </h2>
         </div>
 
         <div className={styles.grid}>
-          <figure className={styles.portrait}>
+          <figure className={styles.portrait} data-reveal>
+            {/* O retrato é `.jpeg`, não `.jpg`. */}
             <Image
               src="/matheus.jpeg"
               alt="Matheus Oliveira"
               width={620}
               height={826}
-              sizes="(max-width: 1000px) 330px, 370px"
-              priority={false}
+              sizes="(max-width: 900px) 320px, 400px"
             />
             <figcaption className={styles.caption}>
               <b>Matheus Oliveira</b>
@@ -63,8 +47,28 @@ export default function About() {
 
           <div className={styles.body}>
             {t.about.paras.map((para, i) => (
-              <p key={i}>{emphasize(para)}</p>
+              <p key={i} data-reveal>
+                {emphasize(para)}
+              </p>
             ))}
+
+            <p className={styles.pathLabel}>{t.about.pathLabel}</p>
+            <div className={styles.path}>
+              {t.about.roles.map((role) => (
+                <div
+                  className={styles.role}
+                  key={`${role.org}-${role.when}`}
+                  data-reveal
+                >
+                  <span className={styles.when}>{role.when}</span>
+                  <div>
+                    <h3 className={styles.roleName}>{role.role}</h3>
+                    <span className={styles.org}>{role.org}</span>
+                    <p className={styles.roleDesc}>{role.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

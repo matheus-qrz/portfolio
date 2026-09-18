@@ -1,0 +1,66 @@
+.fronts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--fio);
+}
+
+.front {
+  padding: clamp(22px, 3.4vh, 34px) clamp(16px, 2.4vw, 34px)
+    clamp(22px, 3.4vh, 34px) 0;
+  border-bottom: 1px solid var(--fio);
+}
+
+/* Coluna da direita: o fio vertical separa as duas frentes de trabalho
+   sem fechar nenhuma das duas numa caixa. */
+.front:nth-child(2n) {
+  border-left: 1px solid var(--fio);
+  padding-left: clamp(16px, 2.4vw, 34px);
+}
+
+.frontTitle {
+  font-variation-settings: "wdth" 112, "wght" 780;
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: -0.015em;
+  margin: 0 0 10px;
+}
+
+.frontBody {
+  color: var(--nevoa);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 48ch;
+}
+
+.scope {
+  margin: clamp(30px, 5vh, 48px) 0 0;
+  max-width: 64ch;
+  color: var(--nevoa);
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.7;
+}
+
+.scope strong {
+  color: var(--papel);
+  font-variation-settings: "wdth" 100, "wght" 700;
+}
+
+.cta {
+  margin-top: clamp(28px, 4vh, 40px);
+}
+
+@media (max-width: 900px) {
+  .fronts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .front {
+    padding-right: 0;
+  }
+
+  .front:nth-child(2n) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}

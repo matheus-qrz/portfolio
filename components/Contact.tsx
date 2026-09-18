@@ -31,10 +31,7 @@ export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
 
-  useReveal(root, [
-    { selector: ".secHead > *", start: "top 84%", y: 22, stagger: 0.08 },
-    { selector: `.${styles.card}`, start: "top 88%", y: 20, duration: 0.8 },
-  ]);
+  useReveal(root);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

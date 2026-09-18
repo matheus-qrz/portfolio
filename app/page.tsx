@@ -1,10 +1,12 @@
 import About from "@/components/About";
 import Contact from "@/components/Contact";
-import Experience from "@/components/Experience";
 import Fall from "@/components/fall/Fall";
 import Footer from "@/components/Footer";
+import Proof from "@/components/Proof";
 import SiteHeader from "@/components/SiteHeader";
+import Sites from "@/components/Sites";
 import SmoothScroll from "@/components/SmoothScroll";
+import Software from "@/components/Software";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { LocaleProvider } from "@/lib/i18n";
 import { QuoteKindProvider } from "@/lib/quoteKind";
@@ -15,14 +17,16 @@ export default function Home() {
       <QuoteKindProvider>
         <SmoothScroll />
         <SiteHeader />
-        {/* A ordem da página: a queda (hero + os quatro projetos), sites,
-            sistemas, prova, orçamento e sobre. A ordem canônica vive em
-            SECTIONS, em lib/content.ts. */}
+        {/* A ordem canônica da página vive em SECTIONS, em lib/content.ts:
+            a queda (hero + os quatro projetos), sites, sistemas, prova,
+            orçamento e sobre. */}
         <main id="top">
           <Fall />
+          <Sites />
+          <Software />
+          <Proof />
           <Contact />
           <About />
-          <Experience />
         </main>
         <Footer />
         <WhatsAppButton />
