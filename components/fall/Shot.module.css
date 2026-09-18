@@ -1,0 +1,38 @@
+/* A caixa tem proporção fixa antes de a imagem chegar: é ela que impede
+   a cena de saltar quando o print carrega. */
+.frame {
+  position: relative;
+  overflow: hidden;
+  background: #0b0f18;
+  border: 1px solid var(--fio-forte);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  margin: 0;
+}
+
+.desk {
+  width: min(620px, 74vw);
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+}
+
+.phone {
+  width: min(210px, 36vw);
+  aspect-ratio: 390 / 844;
+  border-radius: 26px;
+}
+
+.img {
+  object-fit: cover;
+  /* O que importa preservar num print está sempre em cima e à esquerda. */
+  object-position: top left;
+}
+
+@media (max-width: 900px) {
+  .desk {
+    width: 76vw;
+  }
+
+  .phone {
+    width: 40vw;
+  }
+}

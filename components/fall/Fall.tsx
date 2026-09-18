@@ -9,6 +9,7 @@ import { useKindLink } from "@/lib/quoteKind";
 import { registerAnchor } from "@/components/SmoothScroll";
 import { FallContext, type FallLayer, type FallRegistry } from "./FallContext";
 import FallItem from "./FallItem";
+import Shot from "./Shot";
 import { clamp, skyAt } from "./sky";
 import styles from "./Fall.module.css";
 
@@ -351,6 +352,20 @@ export default function Fall() {
                       </a>
                     )}
                   </FallItem>
+
+                  {/* Print sem arquivo não entra na cena: nada de caixa
+                      vazia ocupando o lugar de uma imagem que não existe. */}
+                  {project.shots
+                    .filter((shot) => shot.shot)
+                    .map((shot) => (
+                      <FallItem
+                        key={shot.file}
+                        params={shot}
+                        className={`${styles.item} ${styles.shot}`}
+                      >
+                        <Shot shot={shot} />
+                      </FallItem>
+                    ))}
                 </Fragment>
               );
             })}

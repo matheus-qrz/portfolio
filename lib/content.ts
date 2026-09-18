@@ -172,8 +172,9 @@ export const FALL: FallProject[] = [
     },
     shots: [
       {
-        file: "tableflow-kds-1440.png",
+        file: "tableflow-home-1440.png",
         kind: "desk",
+        shot: true,
         t: 0.355,
         s: 1.28,
         x: -22,
@@ -185,8 +186,8 @@ export const FALL: FallProject[] = [
         sway: 24,
         fade: true,
         alt: {
-          pt: "Painel de pedidos do Tableflow, com as comandas da cozinha",
-          en: "Tableflow's kitchen display, with the open orders",
+          pt: "Página inicial do Tableflow, o SaaS de gestão para restaurantes",
+          en: "Tableflow's home page, the restaurant management SaaS",
         },
       },
       {
@@ -281,17 +282,37 @@ export const FALL: FallProject[] = [
     },
     shots: [
       {
-        file: "meirendeu-chat-390.png",
-        kind: "phone",
+        file: "meirendeu-home-1440.png",
+        kind: "desk",
+        shot: true,
         t: 0.675,
         s: 1.24,
-        x: -26,
+        x: -24,
         y: -4,
         xm: 0,
         ym: -21,
         r: 5,
         rr: -4,
         sway: 22,
+        fade: true,
+        alt: {
+          pt: "Página inicial do MEI Rendeu, com a conversa do assistente no WhatsApp",
+          en: "MEI Rendeu's home page, with the assistant's WhatsApp conversation",
+        },
+      },
+      {
+        file: "meirendeu-chat-390.png",
+        kind: "phone",
+        t: 0.715,
+        s: 0.8,
+        x: 40,
+        y: 14,
+        xm: 30,
+        ym: 26,
+        r: -7,
+        rr: 5,
+        sway: 18,
+        far: true,
         fade: true,
         alt: {
           pt: "Conversa do MEI Rendeu no WhatsApp, lançando uma venda",

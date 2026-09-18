@@ -79,7 +79,7 @@ export default function Atmosphere() {
 
       /* ── lua: passa devagar, porque está longe ────────────────────── */
       if (moon.current) {
-        const dv = (0.33 - p) * screens;
+        const dv = (0.26 - p) * screens;
         const dy = dv * H * 0.5;
         const visible = Math.abs(dy) < 1.7 * H;
         moon.current.style.visibility = visible ? "" : "hidden";

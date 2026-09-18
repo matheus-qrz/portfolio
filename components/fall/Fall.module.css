@@ -223,3 +223,10 @@
     width: min(360px, 84vw);
   }
 }
+
+/* ── print ─────────────────────────────────────────────────────────── */
+.shot {
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+}
