@@ -1,0 +1,760 @@
+/* ─────────────────────────────────────────────────────────────────────
+   /hire
+
+   Mesmos tokens da home (globals.css). A diferença é de ritmo: aqui não
+   há cena, há leitura. Fios separam, nada fica dentro de card fechado,
+   e a brasa marca uma coisa por tela.
+   ──────────────────────────────────────────────────────────────────── */
+
+.page {
+  position: relative;
+  background: var(--noite);
+}
+
+/* O header fixo cobre o topo da seção ao seguir uma âncora. */
+.anchor {
+  scroll-margin-top: 64px;
+}
+
+/* ── header ────────────────────────────────────────────────────────── */
+.chrome {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px var(--gut);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.solid {
+  background: rgba(9, 12, 20, 0.8);
+  border-bottom-color: var(--fio);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  flex: none;
+  font-variation-settings: "wdth" 112, "wght" 800;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.monogram {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: 1px solid var(--fio-forte);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  font-variation-settings: "wdth" 118, "wght" 820;
+}
+
+.markName {
+  white-space: nowrap;
+}
+
+.links {
+  display: flex;
+  gap: 4px;
+  margin-inline: auto;
+}
+
+.link {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-variation-settings: "wdth" 96, "wght" 550;
+  color: var(--nevoa);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--papel);
+  background: rgba(239, 233, 221, 0.06);
+}
+
+.headerCta {
+  padding: 9px 16px;
+  font-size: 13.5px;
+  white-space: nowrap;
+  flex: none;
+}
+
+/* ── hero ──────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: 120px clamp(48px, 8vh, 88px);
+  background: linear-gradient(180deg, #04060c, #0a1122 70%, var(--noite));
+}
+
+/* O mesmo céu da queda, parado: dois brilhos e nada se mexendo. */
+.glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 52% 46% at 82% 30%,
+      rgba(22, 38, 74, 0.85),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 40% 34% at 12% 86%,
+      rgba(240, 112, 63, 0.12),
+      transparent 72%
+    );
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroSub {
+  color: #b8b2a7;
+  max-width: 58ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 14px;
+}
+
+.socials {
+  display: inline-flex;
+  gap: 18px;
+  margin-inline-start: 8px;
+}
+
+.socials a,
+.contactLinks a {
+  font-size: 14px;
+  font-variation-settings: "wdth" 96, "wght" 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--fio-forte);
+  padding-bottom: 2px;
+  transition: border-color 0.2s ease;
+}
+
+.socials a:hover,
+.contactLinks a:hover {
+  border-bottom-color: var(--brasa);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(18px, 4vh, 40px) 0 0;
+  border-top: 1px solid var(--fio);
+}
+
+.fact {
+  padding: 18px 18px 0 0;
+}
+
+.fact + .fact {
+  padding-left: 18px;
+  border-left: 1px solid var(--fio);
+}
+
+.fact dt {
+  font-variation-settings: "wdth" 88, "wght" 600;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nevoa);
+}
+
+.fact dd {
+  margin: 6px 0 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+  font-variation-settings: "wdth" 100, "wght" 550;
+}
+
+/* ── casos ─────────────────────────────────────────────────────────── */
+.cases {
+  border-top: 1px solid var(--fio);
+}
+
+.case {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+  padding-block: clamp(40px, 7vh, 76px);
+  border-bottom: 1px solid var(--fio);
+}
+
+/* A imagem troca de lado; a ordem de leitura no DOM continua a mesma. */
+.flip {
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+}
+
+.flip .caseCopy {
+  order: 2;
+}
+
+/* Caso sem print: cabeçalho de um lado, detalhes do outro. */
+.caseText {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.caseCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.caseHead {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.caseMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  font-variation-settings: "wdth" 88, "wght" 600;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brasa);
+}
+
+.caseWhen {
+  color: var(--nevoa);
+}
+
+.caseName {
+  font-variation-settings: "wdth" 118, "wght" 800;
+  font-size: clamp(26px, 3.2vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.026em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.caseLine {
+  margin: 0;
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.5;
+  color: var(--papel);
+  max-width: 46ch;
+}
+
+.caseDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.block p,
+.built li {
+  margin: 0;
+  color: var(--nevoa);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.blockLabel {
+  margin: 0 0 6px;
+  font-variation-settings: "wdth" 64, "wght" 400;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--papel);
+}
+
+.built {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.built li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.built li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 8px;
+  height: 1px;
+  background: var(--fio-forte);
+}
+
+/* O resultado é a linha que o leitor procura: fio de brasa e texto claro. */
+.result {
+  border-left: 2px solid var(--brasa);
+  padding-left: 16px;
+}
+
+.result p {
+  color: var(--papel);
+}
+
+.caseFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 22px;
+}
+
+.caseText .caseFoot {
+  margin-top: 22px;
+}
+
+.stack {
+  font-variation-settings: "wdth" 64, "wght" 300;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--nevoa);
+}
+
+.visit {
+  font-size: 13.5px;
+  font-variation-settings: "wdth" 96, "wght" 600;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--fio-forte);
+  padding-bottom: 2px;
+}
+
+.visit:hover {
+  border-bottom-color: var(--brasa);
+}
+
+/* ── moldura de navegador ──────────────────────────────────────────── */
+.frame {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--fio-forte);
+  background: #0b0f18;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  position: sticky;
+  top: 96px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 34px;
+  padding-inline: 14px;
+  border-bottom: 1px solid var(--fio);
+  background: #0e131f;
+}
+
+.dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(239, 233, 221, 0.18);
+}
+
+.domain {
+  font-size: 11.5px;
+  color: var(--nevoa);
+  font-variation-settings: "wdth" 88, "wght" 500;
+  letter-spacing: 0.02em;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(239, 233, 221, 0.05);
+}
+
+/* Proporção fixa antes de a imagem chegar: a página não salta. */
+.viewport {
+  position: relative;
+  aspect-ratio: 16 / 10.5;
+}
+
+.shotImg {
+  object-fit: cover;
+  object-position: top left;
+}
+
+/* ── como trabalho ─────────────────────────────────────────────────── */
+.approach {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--fio);
+}
+
+.principle {
+  padding: clamp(24px, 4vh, 38px) clamp(18px, 3vw, 44px)
+    clamp(24px, 4vh, 38px) 0;
+  border-bottom: 1px solid var(--fio);
+}
+
+.principle:nth-child(even) {
+  padding-left: clamp(18px, 3vw, 44px);
+  padding-right: 0;
+  border-left: 1px solid var(--fio);
+}
+
+.principleN {
+  display: block;
+  font-variation-settings: "wdth" 64, "wght" 300;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--brasa);
+  margin-bottom: 12px;
+}
+
+.principleTitle {
+  margin: 0 0 10px;
+  font-variation-settings: "wdth" 112, "wght" 760;
+  font-size: clamp(18px, 1.6vw, 21px);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+}
+
+.principle p {
+  margin: 0;
+  color: var(--nevoa);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 52ch;
+}
+
+/* ── experiência ───────────────────────────────────────────────────── */
+.expGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.5fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: start;
+}
+
+.portrait {
+  margin: 0;
+}
+
+.portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  filter: grayscale(0.35) contrast(1.05);
+  mask-image: linear-gradient(
+    100deg,
+    #000 0%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 78%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.caption {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  color: var(--nevoa);
+}
+
+.caption b {
+  color: var(--papel);
+  font-variation-settings: "wdth" 104, "wght" 700;
+}
+
+.caption span {
+  font-variation-settings: "wdth" 64, "wght" 300;
+  letter-spacing: 0.03em;
+}
+
+.roles {
+  border-top: 1px solid var(--fio);
+}
+
+.role {
+  display: grid;
+  grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr);
+  gap: clamp(12px, 2vw, 28px);
+  padding-block: 22px;
+  border-bottom: 1px solid var(--fio);
+}
+
+.when {
+  font-variation-settings: "wdth" 64, "wght" 300;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--nevoa);
+  white-space: nowrap;
+}
+
+.roleName {
+  font-variation-settings: "wdth" 110, "wght" 750;
+  font-size: 17px;
+  margin: 0;
+}
+
+.org {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--brasa);
+  font-variation-settings: "wdth" 96, "wght" 600;
+}
+
+.roleDesc {
+  color: var(--nevoa);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 8px 0 0;
+  max-width: 64ch;
+}
+
+.alsoLabel {
+  font-variation-settings: "wdth" 88, "wght" 600;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--nevoa);
+  margin: clamp(30px, 5vh, 46px) 0 14px;
+}
+
+.also {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--fio);
+}
+
+.also li {
+  display: grid;
+  grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr);
+  gap: clamp(12px, 2vw, 28px);
+  padding-block: 14px;
+  border-bottom: 1px solid var(--fio);
+  font-size: 14px;
+}
+
+.also b {
+  font-variation-settings: "wdth" 110, "wght" 720;
+}
+
+.also span {
+  color: var(--nevoa);
+  line-height: 1.6;
+}
+
+/* ── contato ───────────────────────────────────────────────────────── */
+.contact {
+  background:
+    radial-gradient(
+      ellipse 50% 60% at 85% 100%,
+      rgba(240, 112, 63, 0.1),
+      transparent 70%
+    ),
+    var(--noite);
+  border-top: 1px solid var(--fio);
+}
+
+.contact :global(.shell) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contactTitle {
+  margin-top: 4px;
+}
+
+.email {
+  align-self: flex-start;
+  margin-top: 10px;
+  font-variation-settings: "wdth" 112, "wght" 700;
+  font-size: clamp(20px, 3.4vw, 40px);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--papel);
+  border-bottom: 2px solid var(--brasa);
+  padding-bottom: 4px;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.email:hover {
+  color: var(--brasa);
+}
+
+.contactLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 20px;
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--nevoa);
+}
+
+/* ── rodapé ────────────────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--fio);
+  padding-block: 28px 34px;
+}
+
+.footerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--nevoa);
+  font-variation-settings: "wdth" 92, "wght" 450;
+}
+
+.footerRow a {
+  text-decoration: none;
+}
+
+.footerRow a:hover {
+  color: var(--papel);
+}
+
+/* ── abaixo de 900px ───────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .links {
+    display: none;
+  }
+
+  .headerCta {
+    margin-inline-start: auto;
+  }
+
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fact:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .fact:nth-child(n + 3) {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--fio);
+  }
+
+  /* No celular o print vem antes do texto: é ele que diz "isto existe". */
+  .case,
+  .flip,
+  .caseText {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .case .frame {
+    order: -1;
+    position: static;
+  }
+
+  .flip .caseCopy {
+    order: 0;
+  }
+
+  /* Caso sem print: stack e link vão para o fim, depois dos detalhes. */
+  .caseText > div:first-child {
+    display: contents;
+  }
+
+  .caseText .caseFoot {
+    order: 2;
+    margin-top: 0;
+  }
+
+  .approach {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .principle,
+  .principle:nth-child(even) {
+    padding-inline: 0;
+    border-left: 0;
+  }
+
+  .expGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .portrait img {
+    max-width: 260px;
+    mask-image: linear-gradient(
+      170deg,
+      #000 0%,
+      #000 62%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .role,
+  .also li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .socials {
+    margin-inline-start: 0;
+    flex-basis: 100%;
+  }
+}
+
+/* O nome sai da tela, não do documento: é ele que dá nome ao link. */
+@media (max-width: 520px) {
+  .markName {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
