@@ -4,11 +4,12 @@ import { quoteSchema, type QuoteKindInput } from "@/lib/quote";
 
 export const runtime = "nodejs";
 
-const TO = process.env.QUOTE_TO_EMAIL ?? "mthsqrz97@gmail.com";
+const TO = process.env.QUOTE_TO_EMAIL ?? "mthsdev97@gmail.com";
 /**
  * O Resend só entrega a partir de um domínio verificado. Enquanto não
- * houver um, `onboarding@resend.dev` funciona e entrega no e-mail dono
- * da conta — que é exatamente para onde isso vai.
+ * houver um, `onboarding@resend.dev` funciona, mas SÓ entrega no e-mail
+ * dono da conta Resend. Se TO for outro e-mail, verifique mths-dev.com.br
+ * no Resend e defina QUOTE_FROM_EMAIL (ex.: orcamento@mths-dev.com.br).
  */
 const FROM = process.env.QUOTE_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
 
