@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export const QUOTE_KINDS = ["site", "sistema", "indefinido"] as const;
+export const QUOTE_KINDS = ["site", "sistema", "ia", "indefinido"] as const;
+export type QuoteKindInput = (typeof QUOTE_KINDS)[number];
 
 /**
  * Um schema só, usado no cliente (feedback imediato) e no servidor

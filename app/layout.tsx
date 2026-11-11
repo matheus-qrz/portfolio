@@ -25,13 +25,14 @@ const archivo = Archivo({
  */
 export const metadata: Metadata = {
   metadataBase: new URL("https://matheusoliveira.dev"),
-  title: "Matheus Oliveira — Sites e sistemas para o seu negócio",
+  title: "Matheus Oliveira — Engenheiro de software · sistemas, sites e IA",
   description:
-    "Sites rápidos para negócios, a partir de R$ 800, e sistemas sob medida. Engenheiro de software em João Pessoa.",
+    "Sistemas sob medida, sites e produtos com IA para negócios que não podem parar. Engenheiro de software em João Pessoa, criador do Vapti e do Tableflow.",
   openGraph: {
-    title: "Matheus Oliveira — Sites e sistemas para o seu negócio",
+    title: "Matheus Oliveira — Engenheiro de software · sistemas, sites e IA",
     description:
-      "Site para o seu negócio a partir de R$ 800 e sistema sob medida com escopo por escrito. Engenheiro de software em João Pessoa.",
+      "Sistemas sob medida, sites e produtos com IA, com escopo, prazo e valor por escrito. Engenheiro de software em João Pessoa.",
+    images: [{ url: "/img/templo.webp", width: 1536, height: 1024 }],
     siteName: "Matheus Oliveira",
     locale: "pt_BR",
     type: "website",
