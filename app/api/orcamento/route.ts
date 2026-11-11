@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { quoteSchema } from "@/lib/quote";
-import type { QuoteKind } from "@/lib/content";
+import { quoteSchema, type QuoteKindInput } from "@/lib/quote";
 
 export const runtime = "nodejs";
 
@@ -46,9 +45,10 @@ function escapeHtml(value: string): string {
 }
 
 /** O assunto do e-mail já diz que tipo de trabalho é. */
-const KIND: Record<QuoteKind, string> = {
+const KIND: Record<QuoteKindInput, string> = {
   site: "Site",
   sistema: "Sistema",
+  ia: "IA",
   indefinido: "A definir",
 };
 

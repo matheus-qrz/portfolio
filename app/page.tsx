@@ -1,36 +1,56 @@
-import About from "@/components/About";
-import Contact from "@/components/Contact";
-import Fall from "@/components/fall/Fall";
-import Footer from "@/components/Footer";
-import Proof from "@/components/Proof";
-import SiteHeader from "@/components/SiteHeader";
-import Sites from "@/components/Sites";
-import SmoothScroll from "@/components/SmoothScroll";
-import Software from "@/components/Software";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import { LocaleProvider } from "@/lib/i18n";
-import { QuoteKindProvider } from "@/lib/quoteKind";
+import { Big_Shoulders_Display, Inter, Martian_Mono } from "next/font/google";
+import About from "@/components/home/About";
+import AiSection from "@/components/home/AiSection";
+import Contact from "@/components/home/Contact";
+import End from "@/components/home/End";
+import Nav from "@/components/home/Nav";
+import Poster from "@/components/home/Poster";
+import Projects from "@/components/home/Projects";
+import Services from "@/components/home/Services";
+import Vapti from "@/components/home/Vapti";
+import { HomeProvider } from "@/components/home/secrets";
+import "@/components/home/home.css";
+
+/**
+ * Fontes da home. A Archivo (texto corrido) já vem do layout; aqui entram
+ * a display condensada dos títulos, a mono das etiquetas e a Inter, que
+ * imita a interface do Vapti dentro do celular de demonstração.
+ */
+const display = Big_Shoulders_Display({
+  subsets: ["latin"],
+  weight: ["700", "900"],
+  variable: "--font-display",
+  display: "swap",
+});
+const mono = Martian_Mono({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-mono",
+  display: "swap",
+});
+const app = Inter({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-app",
+  display: "swap",
+});
 
 export default function Home() {
   return (
-    <LocaleProvider>
-      <QuoteKindProvider>
-        <SmoothScroll />
-        <SiteHeader />
-        {/* A ordem canônica da página vive em SECTIONS, em lib/content.ts:
-            a queda (hero + os quatro projetos), sites, sistemas, prova,
-            orçamento e sobre. */}
+    <div className={`mo ${display.variable} ${mono.variable} ${app.variable}`}>
+      <HomeProvider>
+        <Nav />
         <main id="top">
-          <Fall />
-          <Sites />
-          <Software />
-          <Proof />
-          <Contact />
+          <Poster />
+          <Services />
+          <Vapti />
+          <AiSection />
+          <Projects />
           <About />
+          <Contact />
+          <End />
         </main>
-        <Footer />
-        <WhatsAppButton />
-      </QuoteKindProvider>
-    </LocaleProvider>
+      </HomeProvider>
+    </div>
   );
 }
